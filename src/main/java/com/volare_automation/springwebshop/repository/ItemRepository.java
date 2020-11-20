@@ -43,7 +43,8 @@ public class ItemRepository implements ItemRepositoryInterface {
     @PostConstruct
     private void postConstruct() throws IOException, SQLException {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        getImage();
+        storeImage();
+        System.out.println("Iv been in post construct");
     }
 
 //    public InputStream inputStream () throws SQLException {
@@ -101,15 +102,20 @@ public class ItemRepository implements ItemRepositoryInterface {
 //        preparedStatement = conn.prepareStatement(sql);
 //        preparedStatement.setInt(1,5);
 //        preparedStatement.executeUpdate();
-        String sql = "INSERT INTO images (data) VALUES  (?)";
+        String sql = "INSERT INTO products (product_name, product_description, " +
+                "product_quantity, product_price, product_image) VALUES  (?,?,?,?,?)";
         try (Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
              PreparedStatement pst = con.prepareStatement(sql)) {
 
-            File img = new File("F:/fcu.jpg");
+            File img = new File("C:/borg_ship.jpg");
 
             try (FileInputStream fin = new FileInputStream(img)) {
 
-                pst.setBinaryStream(1, fin, (int) img.length());
+                pst.setBinaryStream(5, fin, (int) img.length());
+                pst.setString(1, "Ultimate Vessel Borg ");
+                pst.setString(2, "The Conqueror Of The Universe");
+                pst.setInt(3, 5);
+                pst.setDouble(4, 249.98);
                 pst.executeUpdate();
             } catch (IOException ex) {
                 Logger.getLogger(ItemRepository.class.getName()).log(

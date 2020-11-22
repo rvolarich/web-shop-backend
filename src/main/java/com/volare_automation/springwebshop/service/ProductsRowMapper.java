@@ -10,12 +10,12 @@ public class ProductsRowMapper implements RowMapper<Products> {
     @Override
     public Products mapRow(ResultSet rs, int i) throws SQLException {
         Products products = new Products();
-        products.setProduct_id(rs.getInt("product_id"));
-        products.setProduct_name(rs.getString("product_name"));
-        products.setProduct_description(rs.getString("product_description"));
-        products.setProduct_quantity(rs.getInt("product_quantity"));
-        products.setProduct_price(rs.getDouble("product_price"));
-        products.setProduct_image(rs.getString("product_image"));
+        products.setProductId(rs.getInt("productId"));
+        products.setProductName(rs.getString("productName"));
+        products.setProductDescription(rs.getString("productDescription"));
+        products.setProductQuantity(rs.getInt("productQuantity"));
+        products.setProductPrice(rs.getDouble("productPrice"));
+        products.setProductImage(rs.getString("productImage"));
         return products;
     }
 }

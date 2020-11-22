@@ -1,10 +1,10 @@
 package com.volare_automation.springwebshop.service;
 
-import com.volare_automation.springwebshop.model.CartItems;
+//import com.volare_automation.springwebshop.model.CartProductTest;
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,17 +16,17 @@ public class UserService implements UserServiceInterface{
     @Autowired
     UserRepositoryInterface userRepositoryInterface;
 
-    List<CartItems> list = new ArrayList<>();
+    List<CartProduct> list = new ArrayList<>();
 
-    public UserService() {
-        System.out.println("Service layer created");
-        list.add(new CartItems("čokolada", 2, 10 ,1));
-        list.add(new CartItems("sladoled", 3, 15 ,2));
-        list.add(new CartItems("masline", 5, 50 ,3));
-    }
+//    public UserService() {
+//        System.out.println("Service layer created");
+//        list.add(new CartProducts("čokolada", 2, 10 ,1));
+//        list.add(new CartProducts("sladoled", 3, 15 ,2));
+//        list.add(new CartProducts("masline", 5, 50 ,3));
+//    }
 
 
-    public List<CartItems> getList() {
+    public List<CartProduct> getList() {
 
         return list;
     }
@@ -88,6 +88,12 @@ public class UserService implements UserServiceInterface{
     public void deleteUser(int id) {
         userRepositoryInterface.deleteUserById(id);
     }
+
+//    @Override
+//    public void postCartProduct(CartProductTest c) {
+//
+//        userRepositoryInterface.postCartProd(c);
+//    }
 
 //    @Override
 //    public void deleteUser(int id) {

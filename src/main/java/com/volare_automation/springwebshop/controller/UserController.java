@@ -1,6 +1,6 @@
 package com.volare_automation.springwebshop.controller;
 
-import com.volare_automation.springwebshop.model.CartItems;
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
-    public List <CartItems> deleteUser(){
+    public List <CartProduct> deleteUser(){
         return userService.getList();
     }
 }

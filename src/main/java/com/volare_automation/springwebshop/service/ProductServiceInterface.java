@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.service;
 
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 
 import java.io.IOException;
@@ -12,4 +13,5 @@ public interface ProductServiceInterface {
     public String getImageService() throws IOException, SQLException;
     public void storeImageService();
     public List<Products> getAllProducts();
+    public void postCartProduct(CartProduct cp);
 }

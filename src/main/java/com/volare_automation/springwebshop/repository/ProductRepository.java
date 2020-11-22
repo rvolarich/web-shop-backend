@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.repository;
 
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.CustomerRowMapper;
@@ -48,7 +49,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     @PostConstruct
     private void postConstruct() throws IOException, SQLException {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        
+
         System.out.println("Iv been in post construct");
     }
 
@@ -76,9 +77,24 @@ public class ProductRepository implements ProductRepositoryInterface {
         List<Products> products = jdbcTemplate.query(
                 sql,
                 new ProductsRowMapper());
-        System.out.println("List length: " + products.size());
         return products;
     }
+
+    @Override
+    public void postCartProduct(CartProduct cp) {
+        String sql = "INSERT INTO guestcart (productId, productName, productDescription, productQuantity," +
+                " productPrice, productImage) " + "VALUES ( ?, ?, ?, ?, ?, ?)";
+        int result = jdbcTemplate.update(sql, cp.getProductId(), cp.getProductName(), cp.getProductDescription(),
+                cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage());
+
+        if (result > 0) {
+            System.out.println("Insert successfully into Guest Cart.");
+        }
+        else if (result==0) {
+            System.out.println("Unsuccessfull insert");
+        }
+    }
+
 
     @Override
     public byte[] getImage() throws SQLException, IOException {

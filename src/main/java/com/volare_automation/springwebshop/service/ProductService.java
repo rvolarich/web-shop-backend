@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.service;
 
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,12 @@ public class ProductService implements ProductServiceInterface {
     @Override
     public List<Products> getAllProducts() {
         return productRepositoryInterface.getAllProducts();
+    }
+
+    @Override
+    public void postCartProduct(CartProduct cp) {
+
+        System.out.println("ime produkta: " + cp.getProductName());
+        productRepositoryInterface.postCartProduct(cp);
     }
 }

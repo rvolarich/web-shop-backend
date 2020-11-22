@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.repository;
 
+//import com.volare_automation.springwebshop.model.CartProductTest;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.CustomerRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,4 +79,17 @@ public class UserRepository implements UserRepositoryInterface{
             System.out.println("Deleted");
         }
     }
+
+//    @Override
+//    public void postCartProd(CartProductTest c) {
+//        String sql = "INSERT INTO one (productname) VALUES ( ?)";
+//        int result = jdbcTemplate.update(sql, c.getProductName());
+//
+//        if (result > 0) {
+//            System.out.println("Insert successfully.");
+//        }
+//        else if (result==0) {
+//            System.out.println("Unsuccessfull insert");
+//        }
+//    }
 }

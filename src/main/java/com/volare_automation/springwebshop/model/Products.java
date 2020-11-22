@@ -5,24 +5,25 @@ import java.math.RoundingMode;
 
 public class Products {
 
-    private int product_id;
-    private String product_name;
-    private String product_description;
-    private int product_quantity;
-    private double product_price;
-    String product_image;
+    private int productId;
+    private String productName;
+    private String productDescription;
+    private int productQuantity;
+    private double productPrice;
+    private String productImage;
 
     public Products() {
     }
 
     public Products(int product_id, String product_name,
                     String product_description, int product_quantity, double product_price, String product_image) {
-        this.product_id = product_id;
-        this.product_name = product_name;
-        this.product_description = product_description;
-        this.product_quantity = product_quantity;
-        this.product_price = product_price;
-        this.product_image = product_image;
+        this.productId = product_id;
+        this.productName = product_name;
+        this.productDescription = product_description;
+        this.productQuantity = product_quantity;
+        this.productPrice = product_price;
+        this.productImage = product_image;
+        System.out.println("bio u konstruktoru");
     }
 
     public double round(double value, int places) {
@@ -33,51 +34,51 @@ public class Products {
         return bd.doubleValue();
     }
 
-    public int getProduct_id() {
-        return product_id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setProductId(int product_id) {
+        this.productId = product_id;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setProductName(String product_name) {
+        this.productName = product_name;
     }
 
-    public String getProduct_description() {
-        return product_description;
+    public String getProductDescription() {
+        return productDescription;
     }
 
-    public void setProduct_description(String product_description) {
-        this.product_description = product_description;
+    public void setProductDescription(String product_description) {
+        this.productDescription = product_description;
     }
 
-    public int getProduct_quantity() {
-        return product_quantity;
+    public int getProductQuantity() {
+        return productQuantity;
     }
 
-    public void setProduct_quantity(int product_quantity) {
-        this.product_quantity = product_quantity;
+    public void setProductQuantity(int product_quantity) {
+        this.productQuantity = product_quantity;
     }
 
-    public double getProduct_price() {
-        return product_price;
+    public double getProductPrice() {
+        return productPrice;
     }
 
-    public void setProduct_price(double product_price) {
-        this.product_price = product_price;
+    public void setProductPrice(double product_price) {
+        this.productPrice = product_price;
     }
 
-    public String getProduct_image() {
-        return product_image;
+    public String getProductImage() {
+        return productImage;
     }
 
-    public void setProduct_image(String product_image) {
-        this.product_image = product_image;
+    public void setProductImage(String product_image) {
+        this.productImage = product_image;
     }
 }

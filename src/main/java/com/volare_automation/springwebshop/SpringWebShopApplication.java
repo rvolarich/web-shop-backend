@@ -14,7 +14,7 @@ public class SpringWebShopApplication{
 
 	public static void main(String[] args) throws SQLException {
 		SpringApplication.run(SpringWebShopApplication.class, args);
-		new ProductRepository();
+
 
 
 

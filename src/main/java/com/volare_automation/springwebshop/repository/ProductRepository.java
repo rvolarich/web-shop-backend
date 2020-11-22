@@ -48,7 +48,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     @PostConstruct
     private void postConstruct() throws IOException, SQLException {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        storeImage();
+        
         System.out.println("Iv been in post construct");
     }
 
@@ -76,7 +76,7 @@ public class ProductRepository implements ProductRepositoryInterface {
         List<Products> products = jdbcTemplate.query(
                 sql,
                 new ProductsRowMapper());
-
+        System.out.println("List length: " + products.size());
         return products;
     }
 

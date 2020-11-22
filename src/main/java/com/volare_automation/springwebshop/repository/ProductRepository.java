@@ -1,5 +1,9 @@
 package com.volare_automation.springwebshop.repository;
 
+import com.volare_automation.springwebshop.model.Products;
+import com.volare_automation.springwebshop.model.User;
+import com.volare_automation.springwebshop.service.CustomerRowMapper;
+import com.volare_automation.springwebshop.service.ProductsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +24,7 @@ import java.io.*;
 import java.sql.*;
 
 @Repository
-public class ItemRepository implements ItemRepositoryInterface {
+public class ProductRepository implements ProductRepositoryInterface {
 
     @Autowired
     private DataSource dataSource;
@@ -65,6 +70,17 @@ public class ItemRepository implements ItemRepositoryInterface {
 //    }
 
     @Override
+    public List<Products> getAllProducts (){
+        String sql = "SELECT * FROM products";
+
+        List<Products> products = jdbcTemplate.query(
+                sql,
+                new ProductsRowMapper());
+
+        return products;
+    }
+
+    @Override
     public byte[] getImage() throws SQLException, IOException {
 
 
@@ -77,8 +93,9 @@ public class ItemRepository implements ItemRepositoryInterface {
         ResultSet rs = ps.executeQuery();
         //FileOutputStream fileOutputStream = new FileOutputStream("G:/fcu.jpg");
         if (rs != null) {
+            int index = 0;
             while(rs.next()) {
-                imgBytes = rs.getBytes(2);
+                imgBytes = rs.getBytes(6);
                // fileOutputStream.write(imgBytes);
             }
             //fileOutputStream.close();
@@ -118,17 +135,19 @@ public class ItemRepository implements ItemRepositoryInterface {
                 pst.setDouble(4, 249.98);
                 pst.executeUpdate();
             } catch (IOException ex) {
-                Logger.getLogger(ItemRepository.class.getName()).log(
+                Logger.getLogger(ProductRepository.class.getName()).log(
                         Level.SEVERE, ex.getMessage(), ex);
             }
 
         } catch (SQLException ex) {
 
-            Logger lgr = Logger.getLogger(ItemRepository.class.getName());
+            Logger lgr = Logger.getLogger(ProductRepository.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
-    }
+
+
+}
 
 //    public void storeImage() {
 //        String sql = "INSERT INTO num(number) VALUES  (?)";

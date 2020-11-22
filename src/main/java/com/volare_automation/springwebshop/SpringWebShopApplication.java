@@ -1,15 +1,10 @@
 package com.volare_automation.springwebshop;
 
-import com.volare_automation.springwebshop.model.Item;
-import com.volare_automation.springwebshop.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import com.volare_automation.springwebshop.repository.ProductRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 
 @SpringBootApplication
 public class SpringWebShopApplication{
@@ -19,7 +14,7 @@ public class SpringWebShopApplication{
 
 	public static void main(String[] args) throws SQLException {
 		SpringApplication.run(SpringWebShopApplication.class, args);
-		new ItemRepository();
+		new ProductRepository();
 
 
 

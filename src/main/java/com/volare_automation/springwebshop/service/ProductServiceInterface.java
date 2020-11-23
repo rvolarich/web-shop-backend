@@ -14,4 +14,5 @@ public interface ProductServiceInterface {
     public void storeImageService();
     public List<Products> getAllProducts();
     public void postCartProduct(CartProduct cp);
+    public List<Integer> getProductId();
 }

@@ -3,6 +3,7 @@ package com.volare_automation.springwebshop.repository;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.model.User;
+import com.volare_automation.springwebshop.service.CartProductRowMapper;
 import com.volare_automation.springwebshop.service.CustomerRowMapper;
 import com.volare_automation.springwebshop.service.ProductsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +95,25 @@ public class ProductRepository implements ProductRepositoryInterface {
         else if (result==0) {
             System.out.println("Unsuccessfull insert");
         }
+    }
+
+    @Override
+    public List<Integer> getProductId() {
+
+        String query = "SELECT productId FROM guestcart";
+        List<Integer> ids = jdbcTemplate.queryForList(query,Integer.class);
+
+        return ids;
+    }
+
+    @Override
+    public List<CartProduct> getCartProducts() {
+        String sql = "SELECT * FROM guestcart";
+
+        List<CartProduct> cartProducts = jdbcTemplate.query(
+                sql,
+                new CartProductRowMapper());
+        return cartProducts;
     }
 
 

@@ -46,5 +46,11 @@ public class CartController {
 
     }
 
+    @RequestMapping(value = "/getcartqty", method = RequestMethod.GET)
+    public Integer getCartQty(){
+        return productRepositoryInterface.getTableQty();
+
+    }
+
 
 }

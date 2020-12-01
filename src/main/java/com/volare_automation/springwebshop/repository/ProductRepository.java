@@ -39,6 +39,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     Connection conn;
     PreparedStatement preparedStatement;
     FileInputStream fileInputStream = null;
+    private Integer cartQty;
 
 //    public Connection getConnection() throws SQLException {
 //        conn = DriverManager
@@ -86,6 +87,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     public void postCartProduct(CartProduct cp) {
         String sql = "INSERT INTO guestcart (productId, productName, productDescription, productQuantity," +
                 " productPrice, productImage) " + "VALUES ( ?, ?, ?, ?, ?, ?)";
+        String query = "SELECT count(*) FROM guestcart";
         int result = jdbcTemplate.update(sql, cp.getProductId(), cp.getProductName(), cp.getProductDescription(),
                 cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage());
 
@@ -95,6 +97,10 @@ public class ProductRepository implements ProductRepositoryInterface {
         else if (result==0) {
             System.out.println("Unsuccessfull insert");
         }
+        cartQty = jdbcTemplate.queryForObject(query, Integer.class);
+
+        System.out.println("from postCartProduct cartqty: " + cartQty);
+
     }
 
     @Override
@@ -114,6 +120,16 @@ public class ProductRepository implements ProductRepositoryInterface {
                 sql,
                 new CartProductRowMapper());
         return cartProducts;
+    }
+
+    @Override
+    public Integer getTableQty() {
+        String query = "SELECT count(*) FROM guestcart";
+
+        int cartQty = jdbcTemplate.queryForObject(query, Integer.class);
+
+        System.out.println("from prod rep cartqty: " + cartQty);
+        return cartQty;
     }
 
 

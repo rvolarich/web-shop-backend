@@ -40,6 +40,7 @@ public class ProductService implements ProductServiceInterface {
 
         System.out.println("ime produkta: " + cp.getProductName());
         productRepositoryInterface.postCartProduct(cp);
+
     }
 
     @Override

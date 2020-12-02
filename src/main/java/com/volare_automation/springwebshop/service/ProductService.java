@@ -39,7 +39,9 @@ public class ProductService implements ProductServiceInterface {
     public void postCartProduct(CartProduct cp) {
 
         System.out.println("ime produkta: " + cp.getProductName());
-        productRepositoryInterface.postCartProduct(cp);
+        cp.setProductQuantity(1);
+        boolean b = true;
+        productRepositoryInterface.postCartProduct(cp, b);
 
     }
 

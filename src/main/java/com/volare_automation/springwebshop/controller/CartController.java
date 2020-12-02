@@ -23,9 +23,9 @@ public class CartController {
     ProductRepositoryInterface productRepositoryInterface;
 
 
-//    @RequestMapping(value = "/pcp", method = RequestMethod.POST)
-//    public void postCartProduct(@RequestBody CartProductTest s){
-//        userServiceInterface.postCartProduct(s);
+//    @RequestMapping(value = "/pcpr", method = RequestMethod.POST)
+//    public void postCartProductReturn(@RequestBody CartProduct cp){
+//        productRepositoryInterface.postCartProduct(cp);
 //    }
 
     @RequestMapping(value = "/pcp", method = RequestMethod.POST)
@@ -52,5 +52,15 @@ public class CartController {
 
     }
 
+    @RequestMapping(value = "/getcartitemqtys", method = RequestMethod.GET)
+    public List<Integer> getCartItemQtys(){
+        return productRepositoryInterface.getCartItemQty();
+
+    }
+
+    @RequestMapping(value = "/deletecart", method = RequestMethod.GET)
+    public List<CartProduct> deleteCart(){
+        return productRepositoryInterface.deleteCart();
+    }
 
 }

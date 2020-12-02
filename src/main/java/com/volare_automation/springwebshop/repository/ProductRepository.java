@@ -39,7 +39,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     Connection conn;
     PreparedStatement preparedStatement;
     FileInputStream fileInputStream = null;
-    private Integer cartQty;
+
 
 //    public Connection getConnection() throws SQLException {
 //        conn = DriverManager
@@ -84,22 +84,40 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public void postCartProduct(CartProduct cp) {
+    public void postCartProduct(CartProduct cp, boolean allowUpdate) {
         String sql = "INSERT INTO guestcart (productId, productName, productDescription, productQuantity," +
                 " productPrice, productImage) " + "VALUES ( ?, ?, ?, ?, ?, ?)";
-        String query = "SELECT count(*) FROM guestcart";
-        int result = jdbcTemplate.update(sql, cp.getProductId(), cp.getProductName(), cp.getProductDescription(),
-                cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage());
-
-        if (result > 0) {
-            System.out.println("Insert successfully into Guest Cart.");
+        String query = "SELECT productId FROM guestcart";
+        String updateQty = "UPDATE guestcart SET productquantity = ? WHERE productid = ?";
+        String getSingleQty = "SELECT productquantity FROM guestcart WHERE productid = ?";
+        List<Integer> idList = jdbcTemplate.queryForList(query, Integer.class);
+        for(int i = 0; i < idList.size(); i++){
+            if(idList.get(i) == cp.getProductId()){
+                Integer total = jdbcTemplate.queryForObject(getSingleQty,
+                        new Object[]{cp.getProductId()}, Integer.class) + cp.getProductQuantity();
+                jdbcTemplate.update(updateQty, total, cp.getProductId());
+                allowUpdate = false;
+            }
         }
-        else if (result==0) {
-            System.out.println("Unsuccessfull insert");
-        }
-        cartQty = jdbcTemplate.queryForObject(query, Integer.class);
+        if(allowUpdate){
+            int result = jdbcTemplate.update(sql, cp.getProductId(), cp.getProductName(), cp.getProductDescription(),
+                    cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage());
 
-        System.out.println("from postCartProduct cartqty: " + cartQty);
+            if (result > 0) {
+                System.out.println("Insert successfully into Guest Cart.");
+            }
+            else if (result==0) {
+                System.out.println("Unsuccessfull insert");
+            }
+        }
+
+
+
+
+
+
+
+
 
     }
 
@@ -124,12 +142,38 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     @Override
     public Integer getTableQty() {
-        String query = "SELECT count(*) FROM guestcart";
+        Integer totalQuantity = 0;
+        List<Integer> totalQty = new ArrayList<Integer>();
+        String queryForQty = "SELECT productquantity FROM guestcart";
 
-        int cartQty = jdbcTemplate.queryForObject(query, Integer.class);
 
-        System.out.println("from prod rep cartqty: " + cartQty);
-        return cartQty;
+        totalQty = jdbcTemplate.queryForList(queryForQty, Integer.class);
+
+        for(int i = 0; i < totalQty.size(); i++){
+            totalQuantity += totalQty.get(i);
+        }
+
+
+
+        return totalQuantity;
+    }
+
+    @Override
+    public List<Integer> getCartItemQty() {
+        List<Integer> qtyCartItemList = new ArrayList<Integer>();
+        String query = "SELECT productquantity FROM guestcart";
+        qtyCartItemList = jdbcTemplate.queryForList(query, Integer.class);
+        return qtyCartItemList;
+    }
+
+    @Override
+    public List<CartProduct> deleteCart() {
+        String sql = "DELETE FROM guestcart";
+        String query = "SELECT * FROM guestcart";
+
+        int delInt = jdbcTemplate.update(sql);
+        List<CartProduct> cp = jdbcTemplate.queryForList(query, CartProduct.class);
+        return cp;
     }
 
 

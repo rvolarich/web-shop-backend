@@ -14,8 +14,10 @@ public interface ProductRepositoryInterface {
     public byte [] getImage() throws SQLException, IOException;
     public void storeImage();
     public List<Products> getAllProducts();
-    public void postCartProduct(CartProduct cp);
+    public void postCartProduct(CartProduct cp, boolean allowUpdate);
     public List<Integer> getProductId();
     public List<CartProduct> getCartProducts();
     public Integer getTableQty();
+    public List<Integer> getCartItemQty();
+    public List<CartProduct> deleteCart();
 }

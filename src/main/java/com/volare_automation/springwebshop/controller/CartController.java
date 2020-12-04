@@ -33,7 +33,7 @@ public class CartController {
         productServiceInterface.postCartProduct(cp);
 
     }
-
+    // returns only boolean and total cart quantity
     @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
     public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
         productRepositoryInterface.postCartAll(cp);

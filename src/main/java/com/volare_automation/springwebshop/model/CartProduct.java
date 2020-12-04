@@ -1,8 +1,5 @@
 package com.volare_automation.springwebshop.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class CartProduct {
 
     private int productId;
@@ -11,6 +8,8 @@ public class CartProduct {
     private int productQuantity;
     private double productPrice;
     String productImage;
+    boolean cartUpdated;
+    private Integer totalCartQty;
 
     public CartProduct() {
     }
@@ -71,5 +70,21 @@ public class CartProduct {
 
     public void setProductImage(String productImage) {
         this.productImage = productImage;
+    }
+
+    public boolean isCartUpdated() {
+        return cartUpdated;
+    }
+
+    public void setCartUpdated(boolean cartUpdated) {
+        this.cartUpdated = cartUpdated;
+    }
+
+    public Integer getTotalCartQty() {
+        return totalCartQty;
+    }
+
+    public void setTotalCartQty(Integer totalCartQty) {
+        this.totalCartQty = totalCartQty;
     }
 }

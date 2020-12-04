@@ -15,4 +15,5 @@ public interface ProductServiceInterface {
     public List<Products> getAllProducts();
     public void postCartProduct(CartProduct cp);
     public List<Integer> getProductId();
+    public List<CartProduct> deleteCartId(CartProduct cp);
 }

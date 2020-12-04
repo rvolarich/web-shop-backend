@@ -49,4 +49,10 @@ public class ProductService implements ProductServiceInterface {
     public List<Integer> getProductId() {
         return null;
     }
+
+    @Override
+    public List<CartProduct> deleteCartId(CartProduct cp) {
+        Integer id = cp.getProductId();
+        return productRepositoryInterface.deleteCartById(id);
+    }
 }

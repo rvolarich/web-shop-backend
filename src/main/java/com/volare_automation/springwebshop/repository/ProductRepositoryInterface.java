@@ -20,4 +20,6 @@ public interface ProductRepositoryInterface {
     public Integer getTableQty();
     public List<Integer> getCartItemQty();
     public List<CartProduct> deleteCart();
+    public List<CartProduct> deleteCartById(Integer id);
+    public CartProduct postCartAll(List<CartProduct> cpl);
 }

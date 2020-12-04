@@ -176,6 +176,52 @@ public class ProductRepository implements ProductRepositoryInterface {
         return cp;
     }
 
+    @Override
+    public List<CartProduct> deleteCartById(Integer id) {
+        String sql = "DELETE FROM guestcart WHERE productid = ?";
+        String query = "SELECT * FROM guestcart";
+
+        Object [] cartItem = new Object[]{id};
+        System.out.println("ID: " + id);
+        int i = jdbcTemplate.update(sql, cartItem);
+        if(i == 0){
+            System.out.println("unsuccesfull delete");
+        }else{
+            System.out.println("succesfull delete");
+        }
+        List<CartProduct> cartProducts = jdbcTemplate.query(
+                query,
+                new CartProductRowMapper());
+        return cartProducts;
+    }
+
+    @Override
+    public CartProduct postCartAll(List<CartProduct> cpl) {
+
+        String query = "insert into guestcart (productId, productName, productDescription, " +
+                "productQuantity, productPrice, productImage) values (?,?,?,?,?,?)";
+        jdbcTemplate.execute("DELETE FROM guestcart");
+        List<Object[]> inputList = new ArrayList<Object[]>();
+        for(CartProduct emp:cpl){
+            Object[] tmp = {emp.getProductId(), emp.getProductName(), emp.getProductDescription(),
+                    emp.getProductQuantity(), emp.getProductPrice(), emp.getProductImage()};
+            inputList.add(tmp);
+        }
+        CartProduct cartProduct = new CartProduct();
+        int [] iList = jdbcTemplate.batchUpdate(query, inputList);
+        for(int i = 0; i < iList.length; i++){
+            if(iList[i] != 1){
+                //cartProduct.setCartUpdated(false);
+            }else {
+//                cartProduct.setCartUpdated(true);
+//                cartProduct.setTotalCartQty(getTableQty());
+            }
+        }
+
+        return cartProduct;
+    }
+
+
 
     @Override
     public byte[] getImage() throws SQLException, IOException {

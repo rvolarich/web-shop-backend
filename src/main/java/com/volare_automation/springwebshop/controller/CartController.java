@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("*")
 public class CartController {
 
     @Autowired
@@ -33,6 +33,21 @@ public class CartController {
         productServiceInterface.postCartProduct(cp);
 
     }
+
+    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
+    public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
+        productRepositoryInterface.postCartAll(cp);
+        cartUpdate.setCartUpdated(true);
+        cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty());
+        return cartUpdate;
+    }
+
+//    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
+//    public void postAllCartProducts(@RequestBody List<CartProduct> cp){
+//        productRepositoryInterface.postCartAll(cp);
+//
+//
+//    }
 
     @RequestMapping(value = "/getid", method = RequestMethod.GET)
     public List<Integer> getProductId(){
@@ -61,6 +76,11 @@ public class CartController {
     @RequestMapping(value = "/deletecart", method = RequestMethod.GET)
     public List<CartProduct> deleteCart(){
         return productRepositoryInterface.deleteCart();
+    }
+
+    @RequestMapping(value = "/deletecartbyid", method = RequestMethod.POST)
+    public List<CartProduct> deleteCartById(@RequestBody CartProduct cp){
+        return productServiceInterface.deleteCartId(cp);
     }
 
 }

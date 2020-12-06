@@ -33,7 +33,7 @@ public class CartController {
         productServiceInterface.postCartProduct(cp);
 
     }
-    // returns only boolean and total cart quantity
+
     @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
     public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
         productRepositoryInterface.postCartAll(cp);
@@ -41,6 +41,14 @@ public class CartController {
         cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty());
         return cartUpdate;
     }
+    // returns only boolean and total cart quantity
+//    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
+//    public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
+//        productRepositoryInterface.postCartAll(cp);
+//        cartUpdate.setCartUpdated(true);
+//        cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty());
+//        return cartUpdate;
+//    }
 
 //    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
 //    public void postAllCartProducts(@RequestBody List<CartProduct> cp){
@@ -81,6 +89,11 @@ public class CartController {
     @RequestMapping(value = "/deletecartbyid", method = RequestMethod.POST)
     public List<CartProduct> deleteCartById(@RequestBody CartProduct cp){
         return productServiceInterface.deleteCartId(cp);
+    }
+
+    @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
+    public void confirmOrder(@RequestBody List<CartProduct> cp){
+        productRepositoryInterface.confirmCartOrder(cp);
     }
 
 }

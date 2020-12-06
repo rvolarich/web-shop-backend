@@ -75,8 +75,8 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     @Override
     public List<Products> getAllProducts (){
-        String sql = "SELECT * FROM products";
-
+        String sql = "SELECT * FROM products ORDER BY productId ASC";
+        //jdbcTemplate.execute("SELECT * FROM products ORDER BY productId ASC;");
         List<Products> products = jdbcTemplate.query(
                 sql,
                 new ProductsRowMapper());
@@ -86,10 +86,11 @@ public class ProductRepository implements ProductRepositoryInterface {
     @Override
     public void postCartProduct(CartProduct cp, boolean allowUpdate) {
         String sql = "INSERT INTO guestcart (productId, productName, productDescription, productQuantity," +
-                " productPrice, productImage) " + "VALUES ( ?, ?, ?, ?, ?, ?)";
+                " productPrice, productImage, productStock) " + "VALUES ( ?, ?, ?, ?, ?, ?, ?)";
         String query = "SELECT productId FROM guestcart";
         String updateQty = "UPDATE guestcart SET productquantity = ? WHERE productid = ?";
         String getSingleQty = "SELECT productquantity FROM guestcart WHERE productid = ?";
+        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
         List<Integer> idList = jdbcTemplate.queryForList(query, Integer.class);
         for(int i = 0; i < idList.size(); i++){
             if(idList.get(i) == cp.getProductId()){
@@ -99,9 +100,12 @@ public class ProductRepository implements ProductRepositoryInterface {
                 allowUpdate = false;
             }
         }
+
         if(allowUpdate){
+            Integer stock = jdbcTemplate.queryForObject(getProductStock,
+                    new Object[]{cp.getProductId()}, Integer.class);
             int result = jdbcTemplate.update(sql, cp.getProductId(), cp.getProductName(), cp.getProductDescription(),
-                    cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage());
+                    cp.getProductQuantity(), cp.getProductPrice(), cp.getProductImage(), stock);
 
             if (result > 0) {
                 System.out.println("Insert successfully into Guest Cart.");
@@ -199,13 +203,18 @@ public class ProductRepository implements ProductRepositoryInterface {
     public CartProduct postCartAll(List<CartProduct> cpl) {
 
         String query = "insert into guestcart (productId, productName, productDescription, " +
-                "productQuantity, productPrice, productImage) values (?,?,?,?,?,?)";
+                "productQuantity, productPrice, productImage, productStock) values (?,?,?,?,?,?,?)";
+        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
         jdbcTemplate.execute("DELETE FROM guestcart");
         List<Object[]> inputList = new ArrayList<Object[]>();
         for(CartProduct emp:cpl){
-            Object[] tmp = {emp.getProductId(), emp.getProductName(), emp.getProductDescription(),
-                    emp.getProductQuantity(), emp.getProductPrice(), emp.getProductImage()};
-            inputList.add(tmp);
+            if(emp.getProductQuantity() > 0) {
+                Integer stock = jdbcTemplate.queryForObject(getProductStock,
+                        new Object[]{emp.getProductId()}, Integer.class);
+                Object[] tmp = {emp.getProductId(), emp.getProductName(), emp.getProductDescription(),
+                        emp.getProductQuantity(), emp.getProductPrice(), emp.getProductImage(), stock};
+                inputList.add(tmp);
+            }
         }
         CartProduct cartProduct = new CartProduct();
         int [] iList = jdbcTemplate.batchUpdate(query, inputList);
@@ -221,6 +230,27 @@ public class ProductRepository implements ProductRepositoryInterface {
         return cartProduct;
     }
 
+    @Override
+    public void confirmCartOrder(List<CartProduct> cp) {
+        boolean allowUpdate = true;
+
+        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
+        String sql = "UPDATE products SET productquantity = ? WHERE productid = ?";
+        for(CartProduct c:cp){
+            Object [] tmp = {c.getProductId(), c.getProductQuantity()};
+            Integer stock = jdbcTemplate.queryForObject(getProductStock,
+                    new Object[]{c.getProductId()}, Integer.class);
+            if(stock - c.getProductQuantity() < 0){
+                allowUpdate = false;
+            }
+            System.out.println("result: " + (stock - c.getProductQuantity()));
+            if(allowUpdate){
+                jdbcTemplate.execute("DELETE FROM guestcart");
+                jdbcTemplate.update(sql, (stock - c.getProductQuantity()), c.getProductId());
+            }
+
+        }
+    }
 
 
     @Override

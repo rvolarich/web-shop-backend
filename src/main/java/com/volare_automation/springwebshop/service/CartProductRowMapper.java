@@ -17,6 +17,7 @@ public class CartProductRowMapper implements RowMapper<CartProduct> {
         cp.setProductQuantity(rs.getInt("productQuantity"));
         cp.setProductPrice(rs.getDouble("productPrice"));
         cp.setProductImage(rs.getString("productImage"));
+        cp.setProductStock(rs.getInt("productStock"));
         return cp;
     }
 }

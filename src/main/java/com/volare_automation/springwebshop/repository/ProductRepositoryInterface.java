@@ -22,4 +22,5 @@ public interface ProductRepositoryInterface {
     public List<CartProduct> deleteCart();
     public List<CartProduct> deleteCartById(Integer id);
     public CartProduct postCartAll(List<CartProduct> cpl);
+    public void confirmCartOrder(List<CartProduct> cp);
 }

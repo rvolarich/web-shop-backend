@@ -12,6 +12,8 @@ public interface UserRepositoryInterface {
     public User getUserById(int id);
     public void updateUser(User u);
     public void deleteUserById(int id);
+    public boolean authUser(User user);
+    public boolean regUser(User user);
     //public void postCartProd(CartProductTest c);
 
 }

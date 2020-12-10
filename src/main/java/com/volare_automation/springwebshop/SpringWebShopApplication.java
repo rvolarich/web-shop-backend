@@ -3,6 +3,8 @@ package com.volare_automation.springwebshop;
 import com.volare_automation.springwebshop.repository.ProductRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 
 import java.sql.SQLException;
 

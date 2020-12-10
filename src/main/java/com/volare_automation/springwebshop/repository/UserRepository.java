@@ -4,6 +4,7 @@ package com.volare_automation.springwebshop.repository;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.CustomerRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +35,7 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public void saveUser(User u){
         String sql = "INSERT INTO customers (firstname, surname) VALUES ( ?, ?)";
-        int result = jdbcTemplate.update(sql, u.getFirstname(), u.getSurname());
+        int result = jdbcTemplate.update(sql, u.getUsername(), u.getPassword());
 
         if (result > 0) {
             System.out.println("Insert successfully.");
@@ -55,14 +56,14 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public void updateUser(User user) {
-        if(user.getFirstname() != null) {
+        if(user.getUsername() != null) {
             String sql = "UPDATE customers SET firstname = ? WHERE id = ?";
-            jdbcTemplate.update(sql, user.getFirstname(), user.getId());
+            jdbcTemplate.update(sql, user.getUsername(), user.getUserid());
             System.out.println("firstname updated");
         }
-        if(user.getSurname() != null) {
+        if(user.getPassword() != null) {
             String sql = "UPDATE customers SET surname = ? WHERE id = ?";
-            jdbcTemplate.update(sql, user.getSurname(), user.getId());
+            jdbcTemplate.update(sql, user.getPassword(), user.getUserid());
             System.out.println("surname updated");
         }
 
@@ -78,6 +79,49 @@ public class UserRepository implements UserRepositoryInterface{
         if(del > 0){
             System.out.println("Deleted");
         }
+    }
+
+    @Override
+    public boolean regUser(User user) {
+        String sql = "INSERT INTO users (username, password) VALUES (?,?)";
+        int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
+        if(i == 1){
+            return true;
+        }
+        return  false;
+    }
+
+
+
+    @Override
+    public boolean authUser(User user) {
+        boolean b = false;
+
+            String sql = "SELECT * FROM users";
+
+        List<User> userList = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) ->
+                        new User(
+
+                                rs.getString("username"),
+                                rs.getString("password")
+
+                        )
+        );
+        for(User u : userList){
+//            System.out.println("User: " + user.getPassword());
+//            System.out.println("User: " + user.getUsername());
+//            System.out.println("U: " + u.getPassword());
+//            System.out.println("U: " + u.getUsername());
+            if(u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
+                return true;
+            }
+
+        }
+//        if(b) System.out.println("You are logged in!");
+//        else System.out.println("You are not logged in!");
+        return false;
     }
 
 //    @Override

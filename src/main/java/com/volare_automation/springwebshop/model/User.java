@@ -2,9 +2,9 @@ package com.volare_automation.springwebshop.model;
 
 public class User {
 
-    private int id;
-    private String firstname;
-    private String surname;
+    private int userid;
+    private String username;
+    private String password;
 
 
 
@@ -12,34 +12,34 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, int id) {
-        this.firstname = firstName;
-        this.surname = lastName;
-        this.id = id;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        //this.userid = userid;
     }
 
-    public int getId() {
-        return id;
+    public int getUserid() {
+        return userid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 //    public String getEmail() {

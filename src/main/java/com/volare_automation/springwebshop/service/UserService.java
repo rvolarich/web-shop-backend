@@ -43,6 +43,11 @@ public class UserService implements UserServiceInterface{
 
     }
 
+    @Override
+    public String getSessionId(User user){
+        return userRepositoryInterface.queryForSessionId(user);
+    }
+
 //    @Override
 //    public User getUser(int id) {
 //        for(User u : list){

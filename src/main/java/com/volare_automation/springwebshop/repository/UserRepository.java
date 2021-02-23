@@ -46,6 +46,26 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
+    public String queryForSessionId(User user){
+        String query = "SELECT sessionid FROM users WHERE username=?";
+        String id = jdbcTemplate.queryForObject(query, new Object[]{user.getUsername()},
+                String.class);
+        return  id;
+    }
+
+//    @Override
+//    public void userLogin(User user){
+//        String sql = "UPDATE users SET sessionid = ? WHERE username = ?";
+//        String query = "SELECT sessionid FROM users WHERE username=?";
+//        String queryId = "SELECT userid FROM users WHERE username=?";
+//
+//        String id = jdbcTemplate.queryForObject(query, new Object[]{"mila"}, String.class);
+//        Integer userid = jdbcTemplate.queryForObject(queryId, new Object[]{"mila"}, Integer.class);
+//
+//        jdbcTemplate.update(sql, sessionId, "mila");
+//    }
+
+    @Override
     public User getUserById(int id) {
 
         String sql = "SELECT * FROM customers WHERE id = ?";
@@ -91,11 +111,15 @@ public class UserRepository implements UserRepositoryInterface{
         return  false;
     }
 
+    @Override
+    public void userLogin(User user) {
+
+    }
 
 
     @Override
     public boolean authUser(User user) {
-        boolean b = false;
+
 
             String sql = "SELECT * FROM users";
 
@@ -110,30 +134,24 @@ public class UserRepository implements UserRepositoryInterface{
                         )
         );
         for(User u : userList){
-//            System.out.println("User: " + user.getPassword());
-//            System.out.println("User: " + user.getUsername());
-//            System.out.println("U: " + u.getPassword());
-//            System.out.println("U: " + u.getUsername());
             if(u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
                 return true;
             }
-
         }
-//        if(b) System.out.println("You are logged in!");
-//        else System.out.println("You are not logged in!");
         return false;
     }
 
-//    @Override
-//    public void postCartProd(CartProductTest c) {
-//        String sql = "INSERT INTO one (productname) VALUES ( ?)";
-//        int result = jdbcTemplate.update(sql, c.getProductName());
-//
-//        if (result > 0) {
-//            System.out.println("Insert successfully.");
-//        }
-//        else if (result==0) {
-//            System.out.println("Unsuccessfull insert");
-//        }
-//    }
+    @Override
+    public void saveSessionId(User user, String sessionId){
+        String sql = "UPDATE users SET sessionid = ? WHERE username = ?";
+        jdbcTemplate.update(sql, sessionId, user.getUsername());
+    }
+
+    @Override
+    public String getUserId(User user) {
+        String queryId = "SELECT userid FROM users WHERE username=?";
+        Integer userid = jdbcTemplate.queryForObject(queryId, new Object[]{user.getUsername()}, Integer.class);
+        return Integer.toString(userid);
+    }
+
 }

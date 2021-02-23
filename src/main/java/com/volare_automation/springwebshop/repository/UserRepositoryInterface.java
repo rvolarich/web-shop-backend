@@ -14,6 +14,10 @@ public interface UserRepositoryInterface {
     public void deleteUserById(int id);
     public boolean authUser(User user);
     public boolean regUser(User user);
+    public void userLogin(User user);
+    public String queryForSessionId(User user);
+    public void saveSessionId(User user, String sessionId);
+    public String getUserId(User user);
     //public void postCartProd(CartProductTest c);
 
 }

@@ -5,7 +5,9 @@ import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.UserRepoInterface;
 import com.volare_automation.springwebshop.service.UserService;
+import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -21,10 +23,13 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceInterface userServiceInterface;
 
     @Autowired
     private UserRepositoryInterface userRepositoryInterface;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
 
 //    @RequestMapping(value = "/", method = RequestMethod.OPTIONS)
@@ -38,20 +43,20 @@ public class UserController {
         System.out.println("This is name: " +  user.getUsername());
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public boolean login(@RequestBody User user) {
-        return userRepositoryInterface.authUser(user);
-    }
+
+
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
     public boolean loggedIn(HttpServletRequest request, HttpServletResponse response) {
         //request.getSession().invalidate();
-        final HttpSession newSession = request.getSession();
+
+        HttpSession newSession = request.getSession(true);
         //System.out.println("session reg: " + newSession.getId());
 
 //        System.out.println("session: " + request.getRequestedSessionId());
         //Cookie ck = new Cookie("session_id", newSession.getId());
-//        System.out.println(ck.getName()+ " " + ck.getValue());
+        System.out.println("SessionID: " + request.getRequestedSessionId());
+        //System.out.println("Request: " + request.getRequestedSessionId());
         //response.addCookie(ck);
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -121,31 +126,31 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers(){
-        return userService.getAllUsers();
+        return userServiceInterface.getAllUsers();
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public User getUserById(@PathVariable int id){
-        return userService.getUser(id);
+        return userServiceInterface.getUser(id);
     }
 
     @RequestMapping(value = "users/save", method = RequestMethod.POST)
     public void saveUser(@RequestBody User u){
-        userService.saveUser(u);
+        userServiceInterface.saveUser(u);
     }
 
     @RequestMapping(value = "users/update", method = RequestMethod.PUT)
     public void updateUser(@RequestBody User u){
-        userService.updateUser(u);
+        userServiceInterface.updateUser(u);
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable int id){
-        userService.deleteUser(id);
+        userServiceInterface.deleteUser(id);
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
     public List <CartProduct> deleteUser(){
-        return userService.getList();
+        return userServiceInterface.getList();
     }
 }

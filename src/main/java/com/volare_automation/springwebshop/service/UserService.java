@@ -32,6 +32,11 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public void printUser(User u) {
+        System.out.println("user = " + u.getUsername());
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepositoryInterface.getAllUsers();
     }

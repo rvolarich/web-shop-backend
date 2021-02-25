@@ -8,12 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://127.0.0.1:3000")
 public class ProductController {
 
     @Autowired
@@ -37,7 +40,16 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public List<Products> getProducts() throws SQLException {
+    public List<Products> getProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+       response.setHeader("Access-Control-Allow-Credentials", "true");
+//        Cookie[] cookies = request.getCookies();
+//        for (int i = 0; i < cookies.length; i++) {
+//            String name = cookies[i].getName();
+//            String value = cookies[i].getValue();
+//            if(cookies[i].getName().equals("CookieTest4")){
+//                System.out.println("sessionCookie= " + value);
+//            }
+//        }
         return productServiceInterface.getAllProducts();
     }
 

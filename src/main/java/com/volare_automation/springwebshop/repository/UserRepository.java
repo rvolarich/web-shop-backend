@@ -154,4 +154,10 @@ public class UserRepository implements UserRepositoryInterface{
         return Integer.toString(userid);
     }
 
+    @Override
+    public void logoutUser(User user) {
+        String sql = "UPDATE users SET sessionid = NULL WHERE username = ?";
+        jdbcTemplate.update(sql, user.getUsername());
+    }
+
 }

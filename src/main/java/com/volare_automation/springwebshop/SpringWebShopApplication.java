@@ -6,7 +6,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.Managemen
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
+//import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 
 import java.sql.SQLException;
 

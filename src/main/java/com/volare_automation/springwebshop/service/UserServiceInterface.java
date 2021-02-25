@@ -15,5 +15,6 @@ public interface UserServiceInterface {
     public void deleteUser(int id);
     public String getSessionId(User user);
     public List<CartProduct> getList();
+    void printUser(User u);
    // public void postCartProduct(CartProductTest c);
 }

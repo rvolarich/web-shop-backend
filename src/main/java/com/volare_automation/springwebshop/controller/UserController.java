@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://127.0.0.1:3000")
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -46,30 +46,14 @@ public class UserController {
 
 
 
-//    @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
-//    public boolean loggedIn(HttpServletRequest request, HttpServletResponse response) {
-        //request.getSession().invalidate();
+    @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
+    public boolean loggedIn(HttpServletRequest request) {
 
-        //HttpSession newSession = request.getSession(true);
-        //System.out.println("session reg: " + newSession.getId());
-
-//        System.out.println("session: " + request.getRequestedSessionId());
-        //Cookie ck = new Cookie("session_id", newSession.getId());
-        //System.out.println("SessionID: " + request.getRequestedSessionId());
-        //System.out.println("Request: " + request.getRequestedSessionId());
-        //response.addCookie(ck);
-        //response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-        //response.setHeader("Access-Control-Allow-Credentials", "true");
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-//
-//        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        //return userRepositoryInterface.regUser(user);
-        
-//        if(newSession != null){
-//            return  true;
-//        }
-//        else return  false;
-//    }
+        if(userServiceInterface.testUserLogged(request)){
+            return  true;
+        }
+         return  false;
+    }
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {

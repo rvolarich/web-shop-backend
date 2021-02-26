@@ -17,7 +17,8 @@ import java.io.*;
 
 @RestController
 @CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true",
-                methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS})
+                methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                        RequestMethod.OPTIONS, RequestMethod.DELETE})
 
 public class UserAuth {
 
@@ -35,109 +36,39 @@ public class UserAuth {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String userLogin(HttpServletRequest request, HttpServletResponse response,
+    public boolean userLogin(HttpServletRequest request, HttpServletResponse response,
                             @RequestBody User user) throws IOException {
 
+
+
         if(userRepositoryInterface.authUser(user)){
-            HttpSession session = request.getSession();
-            String sessionId = session.getId();
+//            HttpSession session = request.getSession(false);
+            String sessionId = userServiceInterface.generateSessionId();
+
+
             userRepositoryInterface.saveSessionId(user, sessionId);
 
             response.addHeader("Set-Cookie",
-                    String.format("%s=%s; %s; %s; %s", "SessionId", sessionId,
+                    String.format("%s=%s; %s; %s; %s",
+                            "SessionId", sessionId,
                             "HttpOnly;", "SameSite=Lax", "Path=/"));
             response.addHeader("Set-Cookie",
-                    String.format("%s=%s; %s; %s; %s", "Userid", userRepositoryInterface.getUserId(user),
+                    String.format("%s=%s; %s; %s; %s", "UserId", userRepositoryInterface.getUserId(user),
                             "HttpOnly;", "SameSite=Lax", "Path=/"));
+            return true;
         }
 
+        return false;
 
-
-
-        return "hi";
-
-
-//        response.addHeader("Set-Cookie",
-//                String.format("%s=%s; %s; %s; %s", "SessionId", sessionId,
-//                        "HttpOnly;", "SameSite=Lax", "Path=/"));
-//        response.addHeader("Set-Cookie",
-//                String.format("%s=%s; %s; %s; %s", "num2", sessionId,
-//                        "HttpOnly;", "SameSite=Lax", "Path=/"));
-
-        //response.setHeader("Referrer-Policy", "no-referrer");
-//    Cookie cookie1 = new Cookie("TestCookie", "123456");
-//    cookie1.setPath("/");
-//    cookie1.setHttpOnly(true);
-//    response.addCookie(cookie1);
-
-//        Cookie[] cookies = request.getCookies();
-//        for (int i = 0; i < cookies.length; i++) {
-//            String name = cookies[i].getName();
-//            String value = cookies[i].getValue();
-//            if(cookies[i].getName().equals("SessionId")){
-//                System.out.println("sessionCookie= " + value);
-//            }
-//        }
-
-
-
-        //response.setHeader("Access-Control-Allow-Credentials", "true");
-
-//
-//
-  }
-
-   // @RequestMapping(value = "/cookie", method = RequestMethod.GET)
-    public String log(HttpServletRequest request, HttpServletResponse response,
-                             String username, String password) {
-
-
-
-//        if(userRepositoryInterface.authUser(user)){
-//            HttpSession session = request.getSession();
-//            String sessionId = session.getId();
-//            userRepositoryInterface.saveSessionId(user, sessionId);
-////            response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
-//
-////            response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-////            response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-////            response.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-//            response.addHeader("Set-Cookie",
-//                    String.format("%s=%s; %s; %s; %s", "SessionId", sessionId,
-//                            "HttpOnly;", "SameSite=Lax", "Path=/"));
-//            response.addHeader("Set-Cookie",
-//                    String.format("%s=%s; %s; %s; %s", "Userid", userRepositoryInterface.getUserId(user),
-//                            "HttpOnly;", "SameSite=Lax", "Path=/"));
-//
-//
-//
-//
-//
-//
-////       response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-////        response.setHeader("Access-Control-Expose-Headers", "SessionId");
-////       response.setHeader("Access-Control-Expose-Headers", "Content-Length");
-////        response.setHeader("Access-Control-Expose-Headers", "*");
-////       response.setHeader("Access-Control-Expose-Headers", "*, Authorization, Content-Length, X-Kuma-Revision");
-////        response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=Lax; Path=/; Domain=127.0.0.1; Secure=true");
-//
-//        }
-        return "logged";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logoutUser(HttpServletRequest request, HttpServletResponse response,
-                           @RequestBody User user){
+    public boolean logoutUser(HttpServletRequest request){
 
-        if(userRepositoryInterface.authUser(user)){
-//            Cookie cookie = new Cookie("SessionId", userServiceInterface.getSessionId(user));
-//            response.addCookie(cookie);
-//            response.addCookie(new Cookie("userid",
-//                    userRepositoryInterface.getUserId(user)));
-            userRepositoryInterface.logoutUser(user);
-            return "You are logged out";
-        }
-        else return "403 Not Authorized";
+        userServiceInterface.logoutUser(request);
+            return false;
+
+
 
     }
 

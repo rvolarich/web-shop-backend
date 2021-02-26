@@ -7,11 +7,17 @@ import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserService implements UserServiceInterface{
+
+    private  Integer userId;
+    private String sessionId;
 
     @Autowired
     UserRepositoryInterface userRepositoryInterface;
@@ -34,6 +40,76 @@ public class UserService implements UserServiceInterface{
     @Override
     public void printUser(User u) {
         System.out.println("user = " + u.getUsername());
+    }
+
+    @Override
+    public boolean logoutUser(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("UserId")) userId = Integer.parseInt(cookie.getValue());
+        }
+
+        System.out.println("UserId = " + userId);
+        int i = userRepositoryInterface.logoutUser(userId);
+        if(i == 1) return false;
+        else return true;
+    }
+
+    @Override
+    public boolean testUserLogged(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("UserId")) userId = Integer.parseInt(cookie.getValue());
+            if(cookie.getName().equals("SessionId")) sessionId = cookie.getValue();
+        }
+       if(sessionId.equals(userRepositoryInterface.testUserLogged(userId))){
+           return true;
+       }
+
+        return false;
+    }
+
+    @Override
+    public String getUserId(User user) {
+        return userRepositoryInterface.getUserId(user);
+    }
+
+//    @Override
+//    public Integer parseUserId(HttpServletRequest request) {
+//        Integer userId = 1;
+//        StringBuilder sb = new StringBuilder();
+//        Cookie[] cookies = request.getCookies();
+//        for(Cookie cookie : cookies) {
+//            if (cookie.getName().charAt(0) == '$') {
+//                for (int i = 1; i < cookie.getName().toCharArray().length; i++) {
+//                    if (cookie.getName().charAt(i) == '&') {
+//                        break;
+//                    } else {
+//                        sb.append(cookie.getName().charAt(i));
+//                    }
+//
+//                    System.out.println("sb je = " + sb.toString());
+//                }
+//            }
+//        }
+//        return userId;
+//    }
+
+    @Override
+    public String generateSessionId() {
+        int leftLimit = 48;
+        int rightLimit = 122;
+        int targetStringLength = 50;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
     }
 
     @Override

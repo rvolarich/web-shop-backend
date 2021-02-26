@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.controller;
 
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.service.ProductServiceInterface;
+import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://127.0.0.1:3000")
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
 public class ProductController {
 
     @Autowired
     private ProductServiceInterface productServiceInterface;
+
+    @Autowired
+    private UserServiceInterface userServiceInterface;
 
     @RequestMapping(value = "/photo", method = RequestMethod.GET)
     public String getPhoto() throws SQLException, IOException {
@@ -39,18 +44,21 @@ public class ProductController {
         return null;
     }
 
+
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public List<Products> getProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException {
-       response.setHeader("Access-Control-Allow-Credentials", "true");
+       List<Products> productList = new ArrayList<>();
 //        Cookie[] cookies = request.getCookies();
 //        for (int i = 0; i < cookies.length; i++) {
 //            String name = cookies[i].getName();
 //            String value = cookies[i].getValue();
-//            if(cookies[i].getName().equals("CookieTest4")){
+//            if(cookies[i].getName().equals("$1&sessid")){
 //                System.out.println("sessionCookie= " + value);
 //            }
 //        }
-        return productServiceInterface.getAllProducts();
+        if(userServiceInterface.testUserLogged(request)) return productServiceInterface.getAllProducts();
+        else return productList;
+
     }
 
 }

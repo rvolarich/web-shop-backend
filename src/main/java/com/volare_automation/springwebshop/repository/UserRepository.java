@@ -4,7 +4,6 @@ package com.volare_automation.springwebshop.repository;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.CustomerRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -155,9 +154,18 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
-    public void logoutUser(User user) {
-        String sql = "UPDATE users SET sessionid = NULL WHERE username = ?";
-        jdbcTemplate.update(sql, user.getUsername());
+    public int logoutUser(Integer userId){
+        String sql = "UPDATE users SET sessionid = NULL WHERE userid = ?";
+        int i = jdbcTemplate.update(sql, userId);
+       return i;
     }
+
+    @Override
+    public String testUserLogged(Integer userId) {
+        String sql = "SELECT sessionid FROM users WHERE userid=?";
+        String session = jdbcTemplate.queryForObject(sql, new Object[]{userId}, String.class);
+        return session;
+    }
+
 
 }

@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.jdbc.core.JdbcOperations;
 //import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
 @SpringBootApplication
@@ -23,6 +25,7 @@ public class SpringWebShopApplication{
 
 
 	}
+
 
 //	@Override
 //	public void run(String... args) throws Exception {

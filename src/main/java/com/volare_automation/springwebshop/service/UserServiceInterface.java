@@ -4,6 +4,7 @@ package com.volare_automation.springwebshop.service;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserServiceInterface {
@@ -16,5 +17,10 @@ public interface UserServiceInterface {
     public String getSessionId(User user);
     public List<CartProduct> getList();
     void printUser(User u);
+    boolean logoutUser(HttpServletRequest request);
+    boolean testUserLogged(HttpServletRequest request);
+    String getUserId(User user);
+   // Integer parseUserId(HttpServletRequest request);
+    String generateSessionId();
    // public void postCartProduct(CartProductTest c);
 }

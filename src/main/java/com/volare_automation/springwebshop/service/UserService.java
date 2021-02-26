@@ -11,13 +11,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Service
 public class UserService implements UserServiceInterface{
 
-    private  Integer userId;
     private String sessionId;
+    private  Integer userId;
+
 
     @Autowired
     UserRepositoryInterface userRepositoryInterface;
@@ -58,12 +60,23 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public boolean testUserLogged(HttpServletRequest request) {
+        String databaseSessionId = "";
+        Boolean isEnabled = false;
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie : cookies){
             if(cookie.getName().equals("UserId")) userId = Integer.parseInt(cookie.getValue());
             if(cookie.getName().equals("SessionId")) sessionId = cookie.getValue();
         }
-       if(sessionId.equals(userRepositoryInterface.testUserLogged(userId))){
+        for(Map.Entry m:userRepositoryInterface.testUserLogged(userId).entrySet()){
+            if(m.getKey().equals("sessionid")){
+                databaseSessionId = (String) m.getValue();
+            }
+            else if(m.getKey().equals("enabled")){
+                isEnabled = (Boolean) m.getValue();
+            }
+        }
+
+       if(sessionId.equals(databaseSessionId) && isEnabled == true){
            return true;
        }
 
@@ -119,10 +132,15 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public User getUser(int id) {
-
-        return userRepositoryInterface.getUserById(id);
-
+        return null;
     }
+
+//    @Override
+//    public User getUser(int id) {
+//
+//        return userRepositoryInterface.getUserById(id);
+//
+//    }
 
     @Override
     public String getSessionId(User user){

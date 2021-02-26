@@ -1,13 +1,17 @@
 package com.volare_automation.springwebshop.repository;
 
 //import com.volare_automation.springwebshop.model.CartProductTest;
+import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.model.User;
-import com.volare_automation.springwebshop.service.CustomerRowMapper;
+import com.volare_automation.springwebshop.service.ProductsRowMapper;
+//import com.volare_automation.springwebshop.service.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepository implements UserRepositoryInterface{
@@ -22,12 +26,12 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM customers";
-
-        List<User> customers = jdbcTemplate.query(
-                sql,
-                new CustomerRowMapper());
-
+//        String sql = "SELECT * FROM customers";
+//
+          List<User> customers = new ArrayList<>();//jdbcTemplate.query(
+//                sql,
+//                new UserRowMapper());
+//
         return customers;
     }
 
@@ -64,14 +68,14 @@ public class UserRepository implements UserRepositoryInterface{
 //        jdbcTemplate.update(sql, sessionId, "mila");
 //    }
 
-    @Override
-    public User getUserById(int id) {
-
-        String sql = "SELECT * FROM customers WHERE id = ?";
-
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new CustomerRowMapper());
-
-    }
+//    @Override
+//    public User getUserById(int id) {
+//
+//        String sql = "SELECT * FROM customers WHERE id = ?";
+//
+//        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new UserRowMapper());
+//
+//    }
 
     @Override
     public void updateUser(User user) {
@@ -127,13 +131,16 @@ public class UserRepository implements UserRepositoryInterface{
                 (rs, rowNum) ->
                         new User(
 
+
                                 rs.getString("username"),
-                                rs.getString("password")
+                                rs.getString("password"),
+                                rs.getBoolean("enabled")
 
                         )
         );
         for(User u : userList){
-            if(u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
+            if(u.getUsername().equals(user.getUsername()) &&
+                    u.getPassword().equals(user.getPassword()) && u.isEnabled() == true) {
                 return true;
             }
         }
@@ -161,10 +168,16 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
-    public String testUserLogged(Integer userId) {
-        String sql = "SELECT sessionid FROM users WHERE userid=?";
-        String session = jdbcTemplate.queryForObject(sql, new Object[]{userId}, String.class);
-        return session;
+    public Map<String, Object> testUserLogged(Integer userId) {
+        String sql = "SELECT enabled, sessionid FROM users WHERE userid=?";
+
+        Map<String, Object> result = jdbcTemplate
+                .queryForMap(sql, new Object[] {userId});
+        for(Map.Entry m:result.entrySet()){
+            System.out.println(m.getKey()+" "+m.getValue());
+        }
+        return result;
+
     }
 
 

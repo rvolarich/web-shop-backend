@@ -2,9 +2,7 @@ package com.volare_automation.springwebshop.repository;
 
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
-import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.service.CartProductRowMapper;
-import com.volare_automation.springwebshop.service.CustomerRowMapper;
 import com.volare_automation.springwebshop.service.ProductsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

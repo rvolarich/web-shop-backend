@@ -42,7 +42,7 @@ public class UserAuth {
 
 
         if(userRepositoryInterface.authUser(user)){
-//            HttpSession session = request.getSession(false);
+
             String sessionId = userServiceInterface.generateSessionId();
 
 

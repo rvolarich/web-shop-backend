@@ -1,9 +1,7 @@
 package com.volare_automation.springwebshop.repository;
 
 //import com.volare_automation.springwebshop.model.CartProductTest;
-import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.model.User;
-import com.volare_automation.springwebshop.service.ProductsRowMapper;
 //import com.volare_automation.springwebshop.service.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -106,8 +104,8 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public boolean regUser(User user) {
-        String sql = "INSERT INTO users (username, password) VALUES (?,?)";
-        int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
+        String sql = "INSERT INTO users (username, password, role, enabled) VALUES (?,?,?,?)";
+        int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), "ROLE_USER", "true");
         if(i == 1){
             return true;
         }
@@ -134,13 +132,13 @@ public class UserRepository implements UserRepositoryInterface{
 
                                 rs.getString("username"),
                                 rs.getString("password"),
-                                rs.getBoolean("enabled")
+                                rs.getString("enabled")
 
                         )
         );
         for(User u : userList){
             if(u.getUsername().equals(user.getUsername()) &&
-                    u.getPassword().equals(user.getPassword()) && u.isEnabled() == true) {
+                    u.getPassword().equals(user.getPassword()) && u.getIsEnabled().equals("true")) {
                 return true;
             }
         }
@@ -161,6 +159,13 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
+    public String getUserName(Integer id) {
+        String queryId = "SELECT username FROM users WHERE userid=?";
+        String username = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
+        return username;
+    }
+
+    @Override
     public int logoutUser(Integer userId){
         String sql = "UPDATE users SET sessionid = NULL WHERE userid = ?";
         int i = jdbcTemplate.update(sql, userId);
@@ -178,6 +183,23 @@ public class UserRepository implements UserRepositoryInterface{
         }
         return result;
 
+    }
+
+    @Override
+    public List<String> listOfUsernames() {
+
+        String sql = "SELECT username FROM users";
+        List<String> usernameList = jdbcTemplate.queryForList(sql, String.class);
+        return usernameList;
+    }
+
+    @Override
+    public String userEnabled(Integer id) {
+
+        String sql = "SELECT enabled FROM users WHERE userid=?";
+        String isEnabled = jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
+        System.out.println("Is enabled iz funkcije = " + id  + isEnabled);
+        return isEnabled;
     }
 
 

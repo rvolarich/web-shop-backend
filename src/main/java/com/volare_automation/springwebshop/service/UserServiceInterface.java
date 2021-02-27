@@ -22,5 +22,8 @@ public interface UserServiceInterface {
     String getUserId(User user);
    // Integer parseUserId(HttpServletRequest request);
     String generateSessionId();
+    boolean userExists(User user);
+    String getUserName(HttpServletRequest request);
+    Integer getUserIdFromCookie(HttpServletRequest request);
    // public void postCartProduct(CartProductTest c);
 }

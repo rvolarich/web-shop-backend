@@ -5,7 +5,7 @@ public class User {
     private int userid;
     private String username;
     private String password;
-    private boolean isEnabled;
+    private String isEnabled;
 
 
 
@@ -13,14 +13,14 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, boolean isEnabled) {
+    public User(String username, String password, String isEnabled) {
 
         this.username = username;
         this.password = password;
         this.isEnabled = isEnabled;
     }
 
-    public User(int userid, String username, String password, boolean isEnabled) {
+    public User(int userid, String username, String password, String isEnabled) {
         this.userid = userid;
         this.username = username;
         this.password = password;
@@ -52,12 +52,12 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEnabled() {
+    public String getIsEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public void setIsEnabled(String isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     //    public String getEmail() {

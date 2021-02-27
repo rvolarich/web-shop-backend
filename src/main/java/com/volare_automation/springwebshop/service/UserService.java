@@ -61,7 +61,7 @@ public class UserService implements UserServiceInterface{
     @Override
     public boolean testUserLogged(HttpServletRequest request) {
         String databaseSessionId = "";
-        Boolean isEnabled = false;
+        String isEnabled = "";
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie : cookies){
             if(cookie.getName().equals("UserId")) userId = Integer.parseInt(cookie.getValue());
@@ -72,11 +72,11 @@ public class UserService implements UserServiceInterface{
                 databaseSessionId = (String) m.getValue();
             }
             else if(m.getKey().equals("enabled")){
-                isEnabled = (Boolean) m.getValue();
+                isEnabled = (String) m.getValue();
             }
         }
 
-       if(sessionId.equals(databaseSessionId) && isEnabled == true){
+       if(sessionId.equals(databaseSessionId) && isEnabled.equals("true")){
            return true;
        }
 
@@ -126,6 +126,28 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public boolean userExists(User user) {
+
+        List<String> usernames = userRepositoryInterface.listOfUsernames();
+        for(int i = 0; i < usernames.size(); i++){
+            if(usernames.get(i).equals(user.getUsername())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String getUserName(HttpServletRequest request) {
+        Integer id = 0;
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("UserId")) id = Integer.parseInt(cookie.getValue());
+        }
+        return userRepositoryInterface.getUserName(id);
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepositoryInterface.getAllUsers();
     }
@@ -135,12 +157,15 @@ public class UserService implements UserServiceInterface{
         return null;
     }
 
-//    @Override
-//    public User getUser(int id) {
-//
-//        return userRepositoryInterface.getUserById(id);
-//
-//    }
+    @Override
+    public Integer getUserIdFromCookie(HttpServletRequest request){
+        Integer id = 0;
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("UserId")) id = Integer.parseInt(cookie.getValue());
+        }
+        return id;
+    }
 
     @Override
     public String getSessionId(User user){

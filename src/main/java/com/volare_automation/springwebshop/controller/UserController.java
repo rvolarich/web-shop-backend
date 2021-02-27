@@ -46,29 +46,6 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
-    public boolean loggedIn(HttpServletRequest request) {
-
-        if(userServiceInterface.testUserLogged(request)){
-            return  true;
-        }
-         return  false;
-    }
-
-    @RequestMapping(value = "/reg", method = RequestMethod.POST)
-    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
-        //request.getSession().invalidate();
-//        final HttpSession newSession = request.getSession();
-//        System.out.println("session reg: " + newSession.getId());
-
-//        System.out.println("session: " + request.getRequestedSessionId());
-//          Cookie ck = new Cookie("session_id", newSession.getId());
-//        System.out.println(ck.getName()+ " " + ck.getValue());
-//          response.addCookie(ck);
-        
-        return userRepositoryInterface.regUser(user);
-    }
-
     @PostMapping("/persistMessage")
     public String persistMessage(HttpServletRequest request, HttpServletResponse response) {
         //@SuppressWarnings("unchecked")

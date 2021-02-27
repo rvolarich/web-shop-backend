@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.authentication;
 
 import com.google.common.io.CharStreams;
 import com.volare_automation.springwebshop.model.User;
+import com.volare_automation.springwebshop.model.UserAuthDataModel;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.json.JSONObject;
@@ -35,11 +36,25 @@ public class UserAuth {
         this.userServiceInterface = userServiceInterface;
     }
 
+    @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
+    public UserAuthDataModel loggedIn(HttpServletRequest request) {
+
+        UserAuthDataModel userAuthDataModel = new UserAuthDataModel();
+        userAuthDataModel.setUsername(userServiceInterface.getUserName(request));
+        userAuthDataModel.setLogged(false);
+        if(userServiceInterface.testUserLogged(request)){
+            userAuthDataModel.setLogged(true);
+        }
+        return  userAuthDataModel;
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public boolean userLogin(HttpServletRequest request, HttpServletResponse response,
-                            @RequestBody User user) throws IOException {
+    public UserAuthDataModel userLogin(HttpServletRequest request, HttpServletResponse response,
+                                       @RequestBody User user) throws IOException {
 
-
+        UserAuthDataModel userAuthDataModel = new UserAuthDataModel();
+        userAuthDataModel.setUsername(user.getUsername());
+        userAuthDataModel.setLogged(false);
 
         if(userRepositoryInterface.authUser(user)){
 
@@ -55,12 +70,48 @@ public class UserAuth {
             response.addHeader("Set-Cookie",
                     String.format("%s=%s; %s; %s; %s", "UserId", userRepositoryInterface.getUserId(user),
                             "HttpOnly;", "SameSite=Lax", "Path=/"));
-            return true;
+
+            userAuthDataModel.setLogged(true);
+
         }
 
-        return false;
+        Integer id = userServiceInterface.getUserIdFromCookie(request);
+
+        if(userRepositoryInterface.userEnabled(id).equals("true")){
+            userAuthDataModel.setUserEnabled("");
+        }
+        else userAuthDataModel.setUserEnabled("User is disabled!");
+
+        return userAuthDataModel;
 
     }
+
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//    public boolean userLogin(HttpServletRequest request, HttpServletResponse response,
+//                             @RequestBody User user) throws IOException {
+//
+//
+//
+//        if(userRepositoryInterface.authUser(user)){
+//
+//            String sessionId = userServiceInterface.generateSessionId();
+//
+//
+//            userRepositoryInterface.saveSessionId(user, sessionId);
+//
+//            response.addHeader("Set-Cookie",
+//                    String.format("%s=%s; %s; %s; %s",
+//                            "SessionId", sessionId,
+//                            "HttpOnly;", "SameSite=Lax", "Path=/"));
+//            response.addHeader("Set-Cookie",
+//                    String.format("%s=%s; %s; %s; %s", "UserId", userRepositoryInterface.getUserId(user),
+//                            "HttpOnly;", "SameSite=Lax", "Path=/"));
+//            return true;
+//        }
+//
+//        return false;
+//
+//    }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public boolean logoutUser(HttpServletRequest request){
@@ -70,6 +121,17 @@ public class UserAuth {
 
 
 
+    }
+
+    @RequestMapping(value = "/reg", method = RequestMethod.POST)
+    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+
+
+        if(!userServiceInterface.userExists(user)){
+            System.out.println("user exists");
+            return false;
+        }
+        else return userRepositoryInterface.regUser(user);
     }
 
     }

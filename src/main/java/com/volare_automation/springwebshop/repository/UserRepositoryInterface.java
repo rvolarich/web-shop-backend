@@ -19,8 +19,11 @@ public interface UserRepositoryInterface {
     public String queryForSessionId(User user);
     public void saveSessionId(User user, String sessionId);
     public String getUserId(User user);
+    String getUserName(Integer id);
     int logoutUser(Integer userId);
     Map<String, Object> testUserLogged(Integer userId);
+    List<String> listOfUsernames();
+    String userEnabled(Integer id);
 
     //public void postCartProd(CartProductTest c);
 

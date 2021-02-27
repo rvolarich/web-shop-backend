@@ -3,7 +3,7 @@ package com.volare_automation.springwebshop.model;
 public class UserAuthDataModel {
 
     private String username;
-    private String userEnabled;
+    private String loginStatus;
     private boolean isLogged;
 
 
@@ -27,11 +27,11 @@ public class UserAuthDataModel {
         isLogged = logged;
     }
 
-    public String getUserEnabled() {
-        return userEnabled;
+    public String getLoginStatus() {
+        return loginStatus;
     }
 
-    public void setUserEnabled(String userEnabled) {
-        this.userEnabled = userEnabled;
+    public void setLoginStatus(String loginStatus) {
+        this.loginStatus = loginStatus;
     }
 }

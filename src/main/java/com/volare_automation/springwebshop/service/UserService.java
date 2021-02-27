@@ -144,7 +144,7 @@ public class UserService implements UserServiceInterface{
         for(Cookie cookie : cookies){
             if(cookie.getName().equals("UserId")) id = Integer.parseInt(cookie.getValue());
         }
-        return userRepositoryInterface.getUserName(id);
+        return userRepositoryInterface.getUserNameById(id);
     }
 
     @Override
@@ -165,6 +165,29 @@ public class UserService implements UserServiceInterface{
             if(cookie.getName().equals("UserId")) id = Integer.parseInt(cookie.getValue());
         }
         return id;
+    }
+
+    @Override
+    public String authUser(User user) {
+        String databasePassword = "";
+        String databaseEnabled = "";
+        for(Map.Entry m:userRepositoryInterface.getPasswordAndEnabledByUsername(user).entrySet()){
+            if(m.getKey().equals("password")){
+                databasePassword = (String) m.getValue();
+            }
+            else if(m.getKey().equals("enabled")){
+                databaseEnabled = (String) m.getValue();
+            }
+        }
+
+        if(user.getPassword().equals(databasePassword) && databaseEnabled.equals("true")){
+            return "authenticated";
+        }
+        else if(user.getPassword().equals(databasePassword) && databaseEnabled.equals("false"))
+        return "disabled";
+
+        else return "wrongUsernameOrPassword";
+
     }
 
     @Override

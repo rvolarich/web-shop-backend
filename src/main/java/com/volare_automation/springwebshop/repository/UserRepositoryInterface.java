@@ -13,13 +13,14 @@ public interface UserRepositoryInterface {
     //public User getUserById(int id);
     public void updateUser(User u);
     public void deleteUserById(int id);
-    public boolean authUser(User user);
+    //public boolean authUser(User user);
     public boolean regUser(User user);
     public void userLogin(User user);
     public String queryForSessionId(User user);
     public void saveSessionId(User user, String sessionId);
     public String getUserId(User user);
-    String getUserName(Integer id);
+    String getUserNameById(Integer id);
+    Map<String, Object> getPasswordAndEnabledByUsername(User user);
     int logoutUser(Integer userId);
     Map<String, Object> testUserLogged(Integer userId);
     List<String> listOfUsernames();

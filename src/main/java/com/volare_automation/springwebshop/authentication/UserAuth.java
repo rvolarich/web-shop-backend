@@ -1,19 +1,14 @@
 package com.volare_automation.springwebshop.authentication;
 
-import com.google.common.io.CharStreams;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.model.UserAuthDataModel;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 
 @RestController
@@ -56,7 +51,7 @@ public class UserAuth {
         userAuthDataModel.setUsername(user.getUsername());
         userAuthDataModel.setLogged(false);
 
-        if(userRepositoryInterface.authUser(user)){
+        if(userServiceInterface.authUser(user).equals("authenticated")){
 
             String sessionId = userServiceInterface.generateSessionId();
 
@@ -72,15 +67,26 @@ public class UserAuth {
                             "HttpOnly;", "SameSite=Lax", "Path=/"));
 
             userAuthDataModel.setLogged(true);
+            userAuthDataModel.setLoginStatus("");
 
         }
 
-        Integer id = userServiceInterface.getUserIdFromCookie(request);
-
-        if(userRepositoryInterface.userEnabled(id).equals("true")){
-            userAuthDataModel.setUserEnabled("");
+        else if(userServiceInterface.authUser(user).equals("disabled")){
+            userAuthDataModel.setLoginStatus("The user is disabled!");
         }
-        else userAuthDataModel.setUserEnabled("User is disabled!");
+
+        else if (userServiceInterface.authUser(user).equals("wrongUsernameOrPassword")){
+            userAuthDataModel.setLoginStatus("The username or password is incorrect!");
+        }
+
+
+
+//        Integer id = userServiceInterface.getUserIdFromCookie(request);
+//
+//        if(userRepositoryInterface.userEnabled(id).equals("true")){
+//            userAuthDataModel.setLoginStatus("");
+//        }
+//        else userAuthDataModel.setLoginStatus("User is disabled!");
 
         return userAuthDataModel;
 

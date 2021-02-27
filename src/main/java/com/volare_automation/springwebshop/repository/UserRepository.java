@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,32 +119,34 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
 
-    @Override
-    public boolean authUser(User user) {
 
 
-            String sql = "SELECT * FROM users";
-
-        List<User> userList = jdbcTemplate.query(
-                sql,
-                (rs, rowNum) ->
-                        new User(
-
-
-                                rs.getString("username"),
-                                rs.getString("password"),
-                                rs.getString("enabled")
-
-                        )
-        );
-        for(User u : userList){
-            if(u.getUsername().equals(user.getUsername()) &&
-                    u.getPassword().equals(user.getPassword()) && u.getIsEnabled().equals("true")) {
-                return true;
-            }
-        }
-        return false;
-    }
+ //   @Override
+//    public boolean authUser(User user) {
+//
+//
+//            String sql = "SELECT * FROM users";
+//
+//        List<User> userList = jdbcTemplate.query(
+//                sql,
+//                (rs, rowNum) ->
+//                        new User(
+//
+//
+//                                rs.getString("username"),
+//                                rs.getString("password"),
+//                                rs.getString("enabled")
+//
+//                        )
+//        );
+//        for(User u : userList){
+//            if(u.getUsername().equals(user.getUsername()) &&
+//                    u.getPassword().equals(user.getPassword()) && u.getIsEnabled().equals("true")) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     @Override
     public void saveSessionId(User user, String sessionId){
@@ -159,10 +162,38 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
-    public String getUserName(Integer id) {
+    public String getUserNameById(Integer id) {
         String queryId = "SELECT username FROM users WHERE userid=?";
         String username = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
         return username;
+    }
+
+    @Override
+    public Map<String, Object> getPasswordAndEnabledByUsername(User user) {
+
+        boolean allowMap = false;
+        Map<String, Object> passwordEnabledMap = new HashMap<String, Object>();
+        String sql = "SELECT password, enabled FROM users WHERE username=?";
+        String query = "SELECT username FROM users";
+
+        List<String> usernameList = jdbcTemplate.queryForList(query, String.class);
+        for(int i = 0; i < usernameList.size(); i++){
+            if(usernameList.get(i).equals(user.getUsername())){
+                allowMap = true;
+            }
+        }
+        if(allowMap) {
+            passwordEnabledMap = jdbcTemplate.queryForMap
+                    (sql, new Object[]{user.getUsername()});
+        }
+        else{
+            passwordEnabledMap.put("password","");
+            passwordEnabledMap.put("enabled","");
+        }
+//        for(Map.Entry m:passwordEnabledMap.entrySet()){
+//            System.out.println(m.getKey()+" "+m.getValue());
+//        }
+        return passwordEnabledMap;
     }
 
     @Override
@@ -176,11 +207,14 @@ public class UserRepository implements UserRepositoryInterface{
     public Map<String, Object> testUserLogged(Integer userId) {
         String sql = "SELECT enabled, sessionid FROM users WHERE userid=?";
 
-        Map<String, Object> result = jdbcTemplate
-                .queryForMap(sql, new Object[] {userId});
-        for(Map.Entry m:result.entrySet()){
-            System.out.println(m.getKey()+" "+m.getValue());
-        }
+
+            Map<String, Object> result = jdbcTemplate
+                    .queryForMap(sql, new Object[]{userId});
+//        for(Map.Entry m:result.entrySet()){
+//            System.out.println(m.getKey()+" "+m.getValue());
+//        }
+
+
         return result;
 
     }

@@ -25,5 +25,6 @@ public interface UserServiceInterface {
     boolean userExists(User user);
     String getUserName(HttpServletRequest request);
     Integer getUserIdFromCookie(HttpServletRequest request);
+    String authUser(User user);
    // public void postCartProduct(CartProductTest c);
 }

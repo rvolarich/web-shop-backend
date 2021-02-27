@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 
 @RestController
@@ -29,6 +30,12 @@ public class UserAuth {
     @Autowired
     public UserAuth(UserServiceInterface userServiceInterface){
         this.userServiceInterface = userServiceInterface;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public void getSession(HttpServletRequest request, HttpServletResponse response){
+        HttpSession session = request.getSession();
+        session.setAttribute("ghztr", "jhhj");
     }
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)

@@ -151,7 +151,11 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public void saveSessionId(User user, String sessionId){
         String sql = "UPDATE users SET sessionid = ? WHERE username = ?";
+       // String createTable = String.format("%s %s %s %s", "CREATE", "TABLE", user.getUsername(),
+         //       "(id int, name varchar)");
+
         jdbcTemplate.update(sql, sessionId, user.getUsername());
+        //jdbcTemplate.execute(createTable);
     }
 
     @Override
@@ -163,8 +167,12 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public String getUserNameById(Integer id) {
+        String username = "";
         String queryId = "SELECT username FROM users WHERE userid=?";
-        String username = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
+        if(id != 0) {
+            username = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
+            System.out.println("USERNAME ID = " + id);
+        }
         return username;
     }
 
@@ -206,14 +214,14 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public Map<String, Object> testUserLogged(Integer userId) {
         String sql = "SELECT enabled, sessionid FROM users WHERE userid=?";
-
-
-            Map<String, Object> result = jdbcTemplate
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(userId != 0) {
+            result = jdbcTemplate
                     .queryForMap(sql, new Object[]{userId});
 //        for(Map.Entry m:result.entrySet()){
 //            System.out.println(m.getKey()+" "+m.getValue());
 //        }
-
+        }
 
         return result;
 

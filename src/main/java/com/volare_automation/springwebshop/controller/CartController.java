@@ -1,19 +1,18 @@
 package com.volare_automation.springwebshop.controller;
 //import com.volare_automation.springwebshop.model.CartProductTest;
-
 import com.volare_automation.springwebshop.model.CartProduct;
-import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.service.ProductServiceInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://127.0.0.1:3000", methods = RequestMethod.POST, allowCredentials = "true")
 public class CartController {
 
     @Autowired
@@ -22,6 +21,9 @@ public class CartController {
     @Autowired
     ProductRepositoryInterface productRepositoryInterface;
 
+    @Autowired
+    UserServiceInterface userServiceInterface;
+
 
 //    @RequestMapping(value = "/pcpr", method = RequestMethod.POST)
 //    public void postCartProductReturn(@RequestBody CartProduct cp){
@@ -29,16 +31,25 @@ public class CartController {
 //    }
 
     @RequestMapping(value = "/pcp", method = RequestMethod.POST)
-    public void postCartProduct(@RequestBody CartProduct cp){
-        productServiceInterface.postCartProduct(cp);
+    public void postCartProduct(HttpServletRequest request, @RequestBody CartProduct cp){
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null) {
+            System.out.println("no cookies");
+        }
+        productServiceInterface.postCartProduct(request, cp);
 
     }
 
     @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
-    public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
-        productRepositoryInterface.postCartAll(cp);
+    public CartProduct postAllCartProducts(HttpServletRequest request,
+                                           @RequestBody List<CartProduct> cp, CartProduct cartUpdate){
+
+        String idString = userServiceInterface.getUserIdFromCookie(request).toString();
+        productRepositoryInterface.postCartAll(cp, idString);
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
         cartUpdate.setCartUpdated(true);
-        cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty());
+        cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty(id));
         return cartUpdate;
     }
     // returns only boolean and total cart quantity
@@ -58,42 +69,56 @@ public class CartController {
 //    }
 
     @RequestMapping(value = "/getid", method = RequestMethod.GET)
-    public List<Integer> getProductId(){
-        return productRepositoryInterface.getProductId();
+    public List<Integer> getProductId(HttpServletRequest request){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productRepositoryInterface.getProductId(id);
 
     }
 
     @RequestMapping(value = "/getcart", method = RequestMethod.GET)
-    public List<CartProduct> getCartProducts(){
-        return productRepositoryInterface.getCartProducts();
+    public List<CartProduct> getCartProducts(HttpServletRequest request){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productRepositoryInterface.getCartProducts(id);
 
     }
 
     @RequestMapping(value = "/getcartqty", method = RequestMethod.GET)
-    public Integer getCartQty(){
-        return productRepositoryInterface.getTableQty();
+    public Integer getCartQty(HttpServletRequest request){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productRepositoryInterface.getTableQty(id);
 
     }
 
     @RequestMapping(value = "/getcartitemqtys", method = RequestMethod.GET)
-    public List<Integer> getCartItemQtys(){
-        return productRepositoryInterface.getCartItemQty();
+    public List<Integer> getCartItemQtys(HttpServletRequest request){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productRepositoryInterface.getCartItemQty(id);
 
     }
 
     @RequestMapping(value = "/deletecart", method = RequestMethod.GET)
-    public List<CartProduct> deleteCart(){
-        return productRepositoryInterface.deleteCart();
+    public List<CartProduct> deleteCart(HttpServletRequest request){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productRepositoryInterface.deleteCart(id);
     }
 
     @RequestMapping(value = "/deletecartbyid", method = RequestMethod.POST)
-    public List<CartProduct> deleteCartById(@RequestBody CartProduct cp){
-        return productServiceInterface.deleteCartId(cp);
+    public List<CartProduct> deleteCartById(HttpServletRequest request, @RequestBody CartProduct cp){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        return productServiceInterface.deleteCartId(cp, id);
     }
 
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
-    public void confirmOrder(@RequestBody List<CartProduct> cp){
-        productRepositoryInterface.confirmCartOrder(cp);
+    public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp){
+
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        productRepositoryInterface.confirmCartOrder(cp, id);
     }
 
 }

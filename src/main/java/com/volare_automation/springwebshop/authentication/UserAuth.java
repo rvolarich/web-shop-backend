@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.authentication;
 
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.model.UserAuthDataModel;
+import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class UserAuth {
 
     UserServiceInterface userServiceInterface;
 
-
-
+    @Autowired
+    private ProductRepositoryInterface productRepositoryInterface;
 
     @Autowired
     private UserRepositoryInterface userRepositoryInterface;
@@ -35,7 +36,9 @@ public class UserAuth {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public void getSession(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
-        session.setAttribute("ghztr", "jhhj");
+        session.setMaxInactiveInterval(60);
+        session.setAttribute(session.getId(), "");
+       // userRepositoryInterface.saveCartproductToSession(session.getId());
     }
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
@@ -75,6 +78,8 @@ public class UserAuth {
 
             userAuthDataModel.setLogged(true);
             userAuthDataModel.setLoginStatus("");
+
+            productRepositoryInterface.createTable(userRepositoryInterface.getUserId(user));
 
         }
 
@@ -140,11 +145,11 @@ public class UserAuth {
     public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
 
 
-        if(!userServiceInterface.userExists(user)){
+        /*if(!userServiceInterface.userExists(user)){
             System.out.println("user exists");
             return false;
-        }
-        else return userRepositoryInterface.regUser(user);
+        }*/
+        return userServiceInterface.registerUser(request, user);
     }
 
     }

@@ -3,7 +3,9 @@ package com.volare_automation.springwebshop.service;
 //import com.volare_automation.springwebshop.model.CartProductTest;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
+import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
+import org.checkerframework.checker.units.qual.Acceleration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     UserRepositoryInterface userRepositoryInterface;
+
+    @Autowired
+    ProductRepositoryInterface productRepositoryInterface;
 
     List<CartProduct> list = new ArrayList<>();
 
@@ -196,6 +201,19 @@ public class UserService implements UserServiceInterface{
 
         else return "wrongUsernameOrPassword";
 
+    }
+
+    @Override
+    public boolean registerUser(HttpServletRequest request, User user) {
+        if(!userExists(user)){
+            return false;
+        }
+        //Integer id = getUserIdFromCookie(request);
+        //productRepositoryInterface.createTable(user.getUsername());
+        userRepositoryInterface.regUser(user);
+
+
+        return true;
     }
 
     @Override

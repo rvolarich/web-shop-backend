@@ -82,12 +82,12 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public void postCartProduct(CartProduct cp, boolean allowUpdate) {
-        String sql = "INSERT INTO guestcart (productId, productName, productDescription, productQuantity," +
-                " productPrice, productImage, productStock) " + "VALUES ( ?, ?, ?, ?, ?, ?, ?)";
-        String query = "SELECT productId FROM guestcart";
-        String updateQty = "UPDATE guestcart SET productquantity = ? WHERE productid = ?";
-        String getSingleQty = "SELECT productquantity FROM guestcart WHERE productid = ?";
+    public void postCartProduct(CartProduct cp, boolean allowUpdate, String id) {
+        String sql = String.format("INSERT INTO t_%s (productId, productName, productDescription, productQuantity," +
+                " productPrice, productImage, productStock) " + "VALUES ( ?, ?, ?, ?, ?, ?, ?)", id);
+        String query = String.format("SELECT productId FROM t_%s", id);
+        String updateQty = String.format("UPDATE t_%s SET productquantity = ? WHERE productid = ?", id);
+        String getSingleQty = String.format("SELECT productquantity FROM t_%s WHERE productid = ?", id);
         String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
         List<Integer> idList = jdbcTemplate.queryForList(query, Integer.class);
         for(int i = 0; i < idList.size(); i++){
@@ -124,17 +124,17 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public List<Integer> getProductId() {
+    public List<Integer> getProductId(String id) {
 
-        String query = "SELECT productId FROM guestcart";
+        String query = String.format("SELECT productId FROM t_%s", id);
         List<Integer> ids = jdbcTemplate.queryForList(query,Integer.class);
 
         return ids;
     }
 
     @Override
-    public List<CartProduct> getCartProducts() {
-        String sql = "SELECT * FROM guestcart";
+    public List<CartProduct> getCartProducts(String id) {
+        String sql = String.format("SELECT * FROM t_%s", id);
 
         List<CartProduct> cartProducts = jdbcTemplate.query(
                 sql,
@@ -142,11 +142,10 @@ public class ProductRepository implements ProductRepositoryInterface {
         return cartProducts;
     }
 
-    @Override
-    public Integer getTableQty() {
+    public Integer getTableQty(String id) {
         Integer totalQuantity = 0;
         List<Integer> totalQty = new ArrayList<Integer>();
-        String queryForQty = "SELECT productquantity FROM guestcart";
+        String queryForQty = String.format("SELECT productquantity FROM t_%s", id);
 
 
         totalQty = jdbcTemplate.queryForList(queryForQty, Integer.class);
@@ -161,17 +160,17 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public List<Integer> getCartItemQty() {
+    public List<Integer> getCartItemQty(String id) {
         List<Integer> qtyCartItemList = new ArrayList<Integer>();
-        String query = "SELECT productquantity FROM guestcart";
+        String query = String.format("SELECT productquantity FROM t_%s", id);
         qtyCartItemList = jdbcTemplate.queryForList(query, Integer.class);
         return qtyCartItemList;
     }
 
     @Override
-    public List<CartProduct> deleteCart() {
-        String sql = "DELETE FROM guestcart";
-        String query = "SELECT * FROM guestcart";
+    public List<CartProduct> deleteCart(String id) {
+        String sql = String.format("DELETE FROM t_%s", id);
+        String query = String.format("SELECT * FROM t_%s", id);
 
         int delInt = jdbcTemplate.update(sql);
         List<CartProduct> cp = jdbcTemplate.queryForList(query, CartProduct.class);
@@ -179,9 +178,9 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public List<CartProduct> deleteCartById(Integer id) {
-        String sql = "DELETE FROM guestcart WHERE productid = ?";
-        String query = "SELECT * FROM guestcart";
+    public List<CartProduct> deleteCartById(Integer id, String idString) {
+        String sql = String.format("DELETE FROM t_%s WHERE productid = ?", idString);
+        String query = String.format("SELECT * FROM t_%s", idString);
 
         Object [] cartItem = new Object[]{id};
         System.out.println("ID: " + id);
@@ -198,12 +197,13 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public CartProduct postCartAll(List<CartProduct> cpl) {
+    public CartProduct postCartAll(List<CartProduct> cpl, String id) {
 
-        String query = "insert into guestcart (productId, productName, productDescription, " +
-                "productQuantity, productPrice, productImage, productStock) values (?,?,?,?,?,?,?)";
+        String query = String.format("insert into t_%s (productId, productName, productDescription, " +
+                "productQuantity, productPrice, productImage, productStock) values (?,?,?,?,?,?,?)", id);
         String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
-        jdbcTemplate.execute("DELETE FROM guestcart");
+        String sql = String.format("DELETE FROM t_%s", id);
+        jdbcTemplate.execute(sql);
         List<Object[]> inputList = new ArrayList<Object[]>();
         for(CartProduct emp:cpl){
             if(emp.getProductQuantity() > 0) {
@@ -229,7 +229,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public void confirmCartOrder(List<CartProduct> cp) {
+    public void confirmCartOrder(List<CartProduct> cp, String id) {
         boolean allowUpdate = true;
 
         String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
@@ -243,11 +243,26 @@ public class ProductRepository implements ProductRepositoryInterface {
             }
             System.out.println("result: " + (stock - c.getProductQuantity()));
             if(allowUpdate){
-                jdbcTemplate.execute("DELETE FROM guestcart");
+                String query = String.format("DELETE FROM t_%s", id);
+                jdbcTemplate.execute(query);
                 jdbcTemplate.update(sql, (stock - c.getProductQuantity()), c.getProductId());
             }
 
         }
+    }
+
+    @Override
+    public void createTable(String id) {
+        String createTable = String.format("CREATE TABLE IF NOT EXISTS t_%s %s", id,
+               "(productid integer," +
+                       "    productname character varying(100), " +
+                       "    productdescription character varying(511), " +
+                       "    productquantity integer," +
+                       "    productprice numeric(6,2)," +
+                       "    productimage character varying," +
+                       "    productstock integer);");
+
+        jdbcTemplate.execute(createTable);
     }
 
 

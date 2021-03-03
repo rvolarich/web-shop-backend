@@ -6,6 +6,7 @@ import com.volare_automation.springwebshop.repository.ProductRepositoryInterface
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,6 +17,9 @@ public class ProductService implements ProductServiceInterface {
 
     @Autowired
     ProductRepositoryInterface productRepositoryInterface;
+
+    @Autowired
+    UserServiceInterface userServiceInterface;
 
 
     @Override
@@ -36,12 +40,14 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public void postCartProduct(CartProduct cp) {
+    public void postCartProduct(HttpServletRequest request, CartProduct cp) {
 
         System.out.println("ime produkta: " + cp.getProductName());
         cp.setProductQuantity(1);
         boolean b = true;
-        productRepositoryInterface.postCartProduct(cp, b);
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        System.out.println("Idddddddd " + id);
+        productRepositoryInterface.postCartProduct(cp, b, id);
 
     }
 
@@ -51,8 +57,8 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public List<CartProduct> deleteCartId(CartProduct cp) {
+    public List<CartProduct> deleteCartId(CartProduct cp, String idString) {
         Integer id = cp.getProductId();
-        return productRepositoryInterface.deleteCartById(id);
+        return productRepositoryInterface.deleteCartById(id, idString);
     }
 }

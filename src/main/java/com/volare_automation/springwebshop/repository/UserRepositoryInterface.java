@@ -25,6 +25,7 @@ public interface UserRepositoryInterface {
     Map<String, Object> testUserLogged(Integer userId);
     List<String> listOfUsernames();
     String userEnabled(Integer id);
+    void saveCartproductToSession(String sessionId);
 
     //public void postCartProd(CartProductTest c);
 

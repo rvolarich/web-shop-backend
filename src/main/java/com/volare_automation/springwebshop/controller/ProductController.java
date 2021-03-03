@@ -56,8 +56,8 @@ public class ProductController {
 //                System.out.println("sessionCookie= " + value);
 //            }
 //        }
-        if(userServiceInterface.testUserLogged(request)) return productServiceInterface.getAllProducts();
-        else return productList;
+        /*if(userServiceInterface.testUserLogged(request))*/ return productServiceInterface.getAllProducts();
+        //else return productList;
 
     }
 

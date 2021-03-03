@@ -27,5 +27,6 @@ public interface UserServiceInterface {
     Integer getUserIdFromCookie(HttpServletRequest request);
     String getSessionIdFromCookie(HttpServletRequest request);
     String authUser(User user);
+    boolean registerUser(HttpServletRequest request, User user);
    // public void postCartProduct(CartProductTest c);
 }

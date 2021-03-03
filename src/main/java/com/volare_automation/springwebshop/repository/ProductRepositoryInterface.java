@@ -3,9 +3,7 @@ package com.volare_automation.springwebshop.repository;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,13 +12,14 @@ public interface ProductRepositoryInterface {
     public byte [] getImage() throws SQLException, IOException;
     public void storeImage();
     public List<Products> getAllProducts();
-    public void postCartProduct(CartProduct cp, boolean allowUpdate);
-    public List<Integer> getProductId();
-    public List<CartProduct> getCartProducts();
-    public Integer getTableQty();
-    public List<Integer> getCartItemQty();
-    public List<CartProduct> deleteCart();
-    public List<CartProduct> deleteCartById(Integer id);
-    public CartProduct postCartAll(List<CartProduct> cpl);
-    public void confirmCartOrder(List<CartProduct> cp);
+    public void postCartProduct(CartProduct cp, boolean allowUpdate, String username);
+    public List<Integer> getProductId(String id);
+    public List<CartProduct> getCartProducts(String id);
+    public Integer getTableQty(String id);
+    public List<Integer> getCartItemQty(String id);
+    public List<CartProduct> deleteCart(String id);
+    public List<CartProduct> deleteCartById(Integer id, String idString);
+    public CartProduct postCartAll(List<CartProduct> cpl, String id);
+    public void confirmCartOrder(List<CartProduct> cp, String id);
+    void createTable(String username);
 }

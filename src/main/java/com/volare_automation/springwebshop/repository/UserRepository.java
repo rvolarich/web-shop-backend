@@ -108,6 +108,7 @@ public class UserRepository implements UserRepositoryInterface{
         String sql = "INSERT INTO users (username, password, role, enabled) VALUES (?,?,?,?)";
         int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), "ROLE_USER", "true");
         if(i == 1){
+            System.out.println("User registered");
             return true;
         }
         return  false;
@@ -242,6 +243,14 @@ public class UserRepository implements UserRepositoryInterface{
         String isEnabled = jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
         System.out.println("Is enabled iz funkcije = " + id  + isEnabled);
         return isEnabled;
+    }
+
+    @Override
+    public void saveCartproductToSession(String sessionId) {
+        String sql = "INSERT INTO spring_session_attributes (sessionid, products) VALUES (?,?)";
+        //String sql = "UPDATE spring_session_attributes SET products = ? WHERE attribute_name= ?";
+        int i = jdbcTemplate.update(sql, sessionId, "hi");
+
     }
 
 

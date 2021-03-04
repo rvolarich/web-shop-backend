@@ -132,8 +132,8 @@ public class ProductRepository implements ProductRepositoryInterface {
 
                     allowPushToSaveList = false;
                     Integer total = jdbcTemplate.queryForObject(getSingleQty,
-                            new Object[]{cpList.get(k).getProductId()}, Integer.class) + cpList.get(k).getProductQuantity();
-                    jdbcTemplate.update(updateQty, total, cpList.get(k).getProductId());
+                            new Object[]{cpList.get(i).getProductId()}, Integer.class) + cpList.get(i).getProductQuantity();
+                    jdbcTemplate.update(updateQty, total, cpList.get(i).getProductId());
                     break;
 
 //
@@ -162,7 +162,7 @@ public class ProductRepository implements ProductRepositoryInterface {
         for(int i = 0; i < cpList.size(); i++){
             Integer stock = jdbcTemplate.queryForObject(getProductStock, new Object[]{cpList.get(i).getProductId()},
                     Integer.class);
-            while(stock == null){};
+            //while(stock == null){};
             jdbcTemplate.update(sql, cpList.get(i).getProductId(), cpList.get(i).getProductName(),
                     cpList.get(i).getProductDescription(), cpList.get(i).getProductQuantity(), cpList.get(i).getProductPrice(),
                     cpList.get(i).getProductImage(), stock);

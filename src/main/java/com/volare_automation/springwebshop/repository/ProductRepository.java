@@ -113,14 +113,60 @@ public class ProductRepository implements ProductRepositoryInterface {
             }
         }
 
+    }
+
+    @Override
+    public void postCartProductList(List<CartProduct> cpList, String idString) {
+        boolean allowPushToSaveList = false;
+        String queryForIdList = String.format("SELECT productId FROM t_%s", idString);
+        String getSingleQty = String.format("SELECT productquantity FROM t_%s WHERE productid = ?", idString);
+        String updateQty = String.format("UPDATE t_%s SET productquantity = ? WHERE productid = ?", idString);
+        String insertProduct = String.format("INSERT INTO t_%s (productId, productName, productDescription, productQuantity," +
+                " productPrice, productImage, productStock) " + "VALUES ( ?, ?, ?, ?, ?, ?, ?)", idString);
+        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
+        List<Integer> idList = jdbcTemplate.queryForList(queryForIdList, Integer.class);
+        List<CartProduct> listToSave = new ArrayList<CartProduct>();
+        for(int i = 0; i < cpList.size(); i++){
+            for(int k = 0; k < idList.size(); k++){
+                if(cpList.get(i).getProductId() == idList.get(k)){
+
+                    allowPushToSaveList = false;
+                    Integer total = jdbcTemplate.queryForObject(getSingleQty,
+                            new Object[]{cpList.get(k).getProductId()}, Integer.class) + cpList.get(k).getProductQuantity();
+                    jdbcTemplate.update(updateQty, total, cpList.get(k).getProductId());
+                    break;
+
+//
+                }else{
+                    allowPushToSaveList = true;
+
+                }
+            }
+            if(allowPushToSaveList){
+                listToSave.add(cpList.get(i));
+            }
+        }
+
+        postListToCart(listToSave, idString);
 
 
+    }
+
+    public void postListToCart(List<CartProduct> cpList, String idString){
+
+        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
+        String sql = String.format("INSERT INTO t_%s (productId, productName, productDescription, productQuantity," +
+                " productPrice, productImage, productStock) " + "VALUES ( ?, ?, ?, ?, ?, ?, ?)", idString);
 
 
-
-
-
-
+        for(int i = 0; i < cpList.size(); i++){
+            Integer stock = jdbcTemplate.queryForObject(getProductStock, new Object[]{cpList.get(i).getProductId()},
+                    Integer.class);
+            while(stock == null){};
+            jdbcTemplate.update(sql, cpList.get(i).getProductId(), cpList.get(i).getProductName(),
+                    cpList.get(i).getProductDescription(), cpList.get(i).getProductQuantity(), cpList.get(i).getProductPrice(),
+                    cpList.get(i).getProductImage(), stock);
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ public interface ProductRepositoryInterface {
     public void storeImage();
     public List<Products> getAllProducts();
     public void postCartProduct(CartProduct cp, boolean allowUpdate, String username);
+    void postCartProductList(List<CartProduct> cpList, String idString);
     public List<Integer> getProductId(String id);
     public List<CartProduct> getCartProducts(String id);
     public Integer getTableQty(String id);

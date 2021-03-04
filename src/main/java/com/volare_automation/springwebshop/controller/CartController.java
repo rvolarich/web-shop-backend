@@ -68,6 +68,13 @@ public class CartController {
 //
 //
 //    }
+    @RequestMapping(value = "/post/cart/local", method = RequestMethod.POST)
+    public void postCartLocal(HttpServletRequest request, @RequestBody List<CartProduct> cpList){
+
+        System.out.println("bio u post cart local");
+        String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        productRepositoryInterface.postCartProductList(cpList, id);
+}
 
     @RequestMapping(value = "/getid", method = RequestMethod.GET)
     public List<Integer> getProductId(HttpServletRequest request){

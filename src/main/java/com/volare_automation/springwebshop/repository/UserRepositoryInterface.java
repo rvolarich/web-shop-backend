@@ -9,9 +9,9 @@ import java.util.Map;
 public interface UserRepositoryInterface {
 
     public List<User> getAllUsers();
-    public void saveUser(User u);
+    public void saveUser(User user);
     //public User getUserById(int id);
-    public void updateUser(User u);
+    public void updateUser(User user, Integer id);
     public void deleteUserById(int id);
     //public boolean authUser(User user);
     public boolean regUser(User user);

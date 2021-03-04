@@ -237,14 +237,14 @@ public class UserService implements UserServiceInterface{
 //    }
 
     @Override
-    public void saveUser(User u) {
+    public void saveUser(User user) {
 
-        userRepositoryInterface.saveUser(u);
+        userRepositoryInterface.saveUser(user);
     }
 
     @Override
-    public void updateUser(User user) {
-        userRepositoryInterface.updateUser(user);
+    public void updateUser(User user, Integer id) {
+        userRepositoryInterface.updateUser(user, id);
     }
 
 //    @Override

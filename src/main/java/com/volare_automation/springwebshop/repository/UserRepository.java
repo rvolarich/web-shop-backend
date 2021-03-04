@@ -77,20 +77,22 @@ public class UserRepository implements UserRepositoryInterface{
 //    }
 
     @Override
-    public void updateUser(User user) {
-        if(user.getUsername() != null) {
-            String sql = "UPDATE customers SET firstname = ? WHERE id = ?";
-            jdbcTemplate.update(sql, user.getUsername(), user.getUserid());
-            System.out.println("firstname updated");
-        }
-        if(user.getPassword() != null) {
-            String sql = "UPDATE customers SET surname = ? WHERE id = ?";
-            jdbcTemplate.update(sql, user.getPassword(), user.getUserid());
-            System.out.println("surname updated");
+    public void updateUser(User user, Integer id) {
+
+        String sql = "UPDATE users SET name = ?, surname = ?, email = ?, password = ?," +
+                "address = ?, zip = ?, city = ?, country = ?  WHERE userid = ?";
+
+            jdbcTemplate.update(sql, user.getNameName(), user.getSurname(), user.getEmail(),
+                    user.getPassword(), user.getAddress(), user.getZip(), user.getCity(),
+                    user.getCountry(), id);
+            System.out.println("user updated");
+
+
+
         }
 
 
-    }
+
 
 
     @Override

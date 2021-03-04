@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true", methods = {
+        RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS})
+
 public class UserController {
 
     @Autowired
@@ -28,62 +30,7 @@ public class UserController {
     @Autowired
     private UserRepositoryInterface userRepositoryInterface;
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
-
-//    @RequestMapping(value = "/", method = RequestMethod.OPTIONS)
-//    public void options (){
-//
-//    }
-
-    @RequestMapping(value = "/testit", method = RequestMethod.POST)
-    public void getString(@ModelAttribute ("user") User user) {
-
-        System.out.println("This is name: " +  user.getUsername());
-    }
-
-
-
-
-    @PostMapping("/persistMessage")
-    public String persistMessage(HttpServletRequest request, HttpServletResponse response) {
-        //@SuppressWarnings("unchecked")
-
-        //System.out.println("request: " + s);
-        //List<String> messages = (List<String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
-//        if (messages == null) {
-//            messages = new ArrayList<>();
-//            request.getSession().setAttribute("MY_SESSION_MESSAGES", messages);
-//        }
-        //messages.add(msg);
-//        request.getSession();
-//        System.out.println("session: " + request.getRequestedSessionId());
-//        Cookie ck = new Cookie("sessid", request.getRequestedSessionId());
-//        System.out.println(ck.getName()+ " " + ck.getValue());
-//        response.addCookie(ck);
-        return "redirect:/";
-    }
-
-
-
-
-
-
-
-
-//    @RequestMapping(value = "/testit", method = RequestMethod.POST)
-//    public void getString(HttpServletRequest request) throws IOException {
-//        StringBuilder buffer = new StringBuilder();
-//        BufferedReader br = request.getReader();
-//        String line;
-//        while((line = br.readLine()) != null){
-//            buffer.append(line);
-//            buffer.append(System.lineSeparator());
-//        }
-//        String data = buffer.toString();
-//        System.out.println("This is name: " +  buffer);
-//    }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers(){
@@ -96,13 +43,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "users/save", method = RequestMethod.POST)
-    public void saveUser(@RequestBody User u){
-        userServiceInterface.saveUser(u);
+    public void saveUser( @RequestBody User user){
+
+
+        userServiceInterface.saveUser(user);
     }
 
     @RequestMapping(value = "users/update", method = RequestMethod.PUT)
-    public void updateUser(@RequestBody User u){
-        userServiceInterface.updateUser(u);
+    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody User u){
+
+        Integer id = userServiceInterface.getUserIdFromCookie(request);
+        userServiceInterface.updateUser(u, id);
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)

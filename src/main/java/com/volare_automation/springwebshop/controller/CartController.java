@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", methods = RequestMethod.POST, allowCredentials = "true")
+@CrossOrigin(origins = "http://127.0.0.1:3000", methods = {RequestMethod.POST, RequestMethod.GET},
+        allowCredentials = "true")
 public class CartController {
 
     @Autowired
@@ -80,6 +81,7 @@ public class CartController {
     public List<CartProduct> getCartProducts(HttpServletRequest request){
 
         String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        System.out.println("id in getcart");
         return productRepositoryInterface.getCartProducts(id);
 
     }

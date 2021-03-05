@@ -7,6 +7,7 @@ import com.volare_automation.springwebshop.repository.ProductRepositoryInterface
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import org.checkerframework.checker.units.qual.Acceleration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -22,6 +23,13 @@ public class UserService implements UserServiceInterface{
     private String sessionId;
     private  Integer userId;
 
+
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(PasswordEncoder passwordEncoder){
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     UserRepositoryInterface userRepositoryInterface;
@@ -182,6 +190,9 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public String authUser(User user) {
+
+
+        System.out.println("user password " + user.getPassword());
         String databasePassword = "";
         String databaseEnabled = "";
         for(Map.Entry m:userRepositoryInterface.getPasswordAndEnabledByUsername(user).entrySet()){
@@ -193,10 +204,12 @@ public class UserService implements UserServiceInterface{
             }
         }
 
-        if(user.getPassword().equals(databasePassword) && databaseEnabled.equals("true")){
+
+
+        if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("true")){
             return "authenticated";
         }
-        else if(user.getPassword().equals(databasePassword) && databaseEnabled.equals("false"))
+        else if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("false"))
         return "disabled";
 
         else return "wrongUsernameOrPassword";
@@ -205,15 +218,13 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public boolean registerUser(HttpServletRequest request, User user) {
+
         if(!userExists(user)){
             return false;
         }
-        //Integer id = getUserIdFromCookie(request);
-        //productRepositoryInterface.createTable(user.getUsername());
-        userRepositoryInterface.regUser(user);
 
-
-        return true;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepositoryInterface.regUser(user);
     }
 
     @Override
@@ -244,6 +255,8 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public void updateUser(User user, Integer id) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepositoryInterface.updateUser(user, id);
     }
 

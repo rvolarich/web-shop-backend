@@ -60,8 +60,9 @@ public class UserAuth {
         UserAuthDataModel userAuthDataModel = new UserAuthDataModel();
         userAuthDataModel.setUsername(user.getUsername());
         userAuthDataModel.setLogged(false);
-
-        if(userServiceInterface.authUser(user).equals("authenticated")){
+        String userAuthData = userServiceInterface.authUser(user);
+        System.out.println("bio u login");
+        if(userAuthData.equals("authenticated")){
 
             String sessionId = userServiceInterface.generateSessionId();
 
@@ -83,11 +84,11 @@ public class UserAuth {
 
         }
 
-        else if(userServiceInterface.authUser(user).equals("disabled")){
+        else if(userAuthData.equals("disabled")){
             userAuthDataModel.setLoginStatus("The user is disabled!");
         }
 
-        else if (userServiceInterface.authUser(user).equals("wrongUsernameOrPassword")){
+        else if (userAuthData.equals("wrongUsernameOrPassword")){
             userAuthDataModel.setLoginStatus("The username or password is incorrect!");
         }
 

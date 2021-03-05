@@ -107,6 +107,7 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public boolean regUser(User user) {
+
         String sql = "INSERT INTO users (username, password, role, enabled) VALUES (?,?,?,?)";
         int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), "ROLE_USER", "true");
         if(i == 1){

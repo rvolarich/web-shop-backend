@@ -17,4 +17,5 @@ public interface ProductServiceInterface {
     public void postCartProduct(HttpServletRequest request, CartProduct cp);
     public List<Integer> getProductId();
     public List<CartProduct> deleteCartId(CartProduct cp, String idString);
+    boolean updateProducts(CartProduct cp);
 }

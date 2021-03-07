@@ -61,4 +61,18 @@ public class ProductService implements ProductServiceInterface {
         Integer id = cp.getProductId();
         return productRepositoryInterface.deleteCartById(id, idString);
     }
+
+    @Override
+    public boolean updateProducts(CartProduct cp) {
+
+
+        double doublePrice = Double.parseDouble(cp.getProductPriceString());
+        double doublePriceRounded = Math.round(doublePrice * 100.0) /100.0;
+        boolean sRet = productRepositoryInterface.updateProducts(doublePriceRounded,
+                cp.getProductQuantity(), cp.getProductId());
+        if(sRet){
+            return true;
+        }
+        return false;
+    }
 }

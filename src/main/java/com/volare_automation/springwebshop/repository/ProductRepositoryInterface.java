@@ -23,4 +23,5 @@ public interface ProductRepositoryInterface {
     public CartProduct postCartAll(List<CartProduct> cpl, String id);
     public void confirmCartOrder(List<CartProduct> cp, String id);
     void createTable(String username);
+    boolean updateProducts(double price, Integer quantity, Integer id);
 }

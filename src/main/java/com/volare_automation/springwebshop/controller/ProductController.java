@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.controller;
 
+import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.service.ProductServiceInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,17 @@ public class ProductController {
         /*if(userServiceInterface.testUserLogged(request))*/ return productServiceInterface.getAllProducts();
         //else return productList;
 
+    }
+
+    @RequestMapping(value = "/products/update", method = RequestMethod.POST)
+    public String updateProducts(@RequestBody CartProduct cp){
+
+        if(productServiceInterface.updateProducts(cp)){
+            return "Successfull update!";
+        }
+
+
+        return "Unsuccessfull update!";
     }
 
 }

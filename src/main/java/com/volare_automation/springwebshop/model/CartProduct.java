@@ -11,6 +11,7 @@ public class CartProduct {
     boolean cartUpdated;
     private Integer totalCartQty;
     private Integer productStock;
+    private String productPriceString;
 
     public CartProduct() {
     }
@@ -96,5 +97,13 @@ public class CartProduct {
 
     public void setProductStock(Integer productStock) {
         this.productStock = productStock;
+    }
+
+    public String getProductPriceString() {
+        return productPriceString;
+    }
+
+    public void setProductPriceString(String productPriceString) {
+        this.productPriceString = productPriceString;
     }
 }

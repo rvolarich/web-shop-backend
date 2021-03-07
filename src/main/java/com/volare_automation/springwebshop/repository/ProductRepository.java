@@ -311,6 +311,17 @@ public class ProductRepository implements ProductRepositoryInterface {
         jdbcTemplate.execute(createTable);
     }
 
+    @Override
+    public boolean updateProducts(double price, Integer quantity, Integer id) {
+
+        String sql = "UPDATE products SET productprice = ?, productquantity = ? WHERE productid = ?";
+        int i = jdbcTemplate.update(sql, price, quantity, id);
+        if(i == 1){
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public byte[] getImage() throws SQLException, IOException {

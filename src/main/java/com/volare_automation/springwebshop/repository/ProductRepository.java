@@ -322,6 +322,17 @@ public class ProductRepository implements ProductRepositoryInterface {
         return false;
     }
 
+    @Override
+    public boolean insertProduct(CartProduct cp) {
+
+        String sql = "INSERT INTO products (productname, productdescription," +
+                "productquantity, productprice, productimage) VALUES (?,?,?,?,?)";
+
+        int i = jdbcTemplate.update(sql, cp.getProductName(), cp.getProductDescription(), cp.getProductQuantity(),
+                cp.getProductPrice(), cp.getProductImage());
+        return false;
+    }
+
 
     @Override
     public byte[] getImage() throws SQLException, IOException {

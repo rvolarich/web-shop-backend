@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.controller;
 
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
+import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.service.ProductServiceInterface;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,13 @@ public class ProductController {
 
     @Autowired
     private UserServiceInterface userServiceInterface;
+
+    private final ProductRepositoryInterface productRepositoryInterface;
+
+    @Autowired
+    public ProductController(ProductRepositoryInterface productRepositoryInterface){
+        this.productRepositoryInterface = productRepositoryInterface;
+    }
 
     @RequestMapping(value = "/photo", method = RequestMethod.GET)
     public String getPhoto() throws SQLException, IOException {
@@ -72,6 +80,17 @@ public class ProductController {
 
 
         return "Unsuccessfull update!";
+    }
+
+    @RequestMapping(value = "/products/insert", method = RequestMethod.POST)
+    public String insertProducts(@RequestBody CartProduct cp){
+
+        if(productRepositoryInterface.insertProduct(cp)){
+            return "Successfull insert!";
+        }
+
+
+        return "Unsuccessfull insert!";
     }
 
 }

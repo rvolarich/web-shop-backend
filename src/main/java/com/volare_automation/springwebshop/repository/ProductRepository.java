@@ -330,6 +330,9 @@ public class ProductRepository implements ProductRepositoryInterface {
 
         int i = jdbcTemplate.update(sql, cp.getProductName(), cp.getProductDescription(), cp.getProductQuantity(),
                 cp.getProductPrice(), cp.getProductImage());
+        if(i == 1){
+            return true;
+        }
         return false;
     }
 

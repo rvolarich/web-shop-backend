@@ -75,22 +75,22 @@ public class ProductController {
     public String updateProducts(@RequestBody CartProduct cp){
 
         if(productServiceInterface.updateProducts(cp)){
-            return "Successfull update!";
+            return "Product successfully updated!";
         }
 
 
-        return "Unsuccessfull update!";
+        return "Error updating product!";
     }
 
     @RequestMapping(value = "/products/insert", method = RequestMethod.POST)
     public String insertProducts(@RequestBody CartProduct cp){
 
         if(productRepositoryInterface.insertProduct(cp)){
-            return "Successfull insert!";
+            return "Product added successfully!";
         }
 
 
-        return "Unsuccessfull insert!";
+        return "Error adding product!";
     }
 
     @RequestMapping(value = "/products/del", method = RequestMethod.DELETE)
@@ -98,9 +98,9 @@ public class ProductController {
         System.out.println("id: " + cp.getProductId());
 
         if(productRepositoryInterface.deleteProduct(cp)){
-            return "Successfull delete!";
+            return "Successfully deleted!";
         }
-        return "Unsuccessfull delete!";
+        return "Error deleting product!";
     }
 
 

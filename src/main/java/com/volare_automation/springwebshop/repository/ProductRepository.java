@@ -333,6 +333,18 @@ public class ProductRepository implements ProductRepositoryInterface {
         return false;
     }
 
+    @Override
+    public boolean deleteProduct(CartProduct cp) {
+
+        String sql = "DELETE FROM products WHERE productid=?";
+
+        int i = jdbcTemplate.update(sql, cp.getProductId());
+        if(i == 1){
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public byte[] getImage() throws SQLException, IOException {

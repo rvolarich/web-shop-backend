@@ -93,4 +93,15 @@ public class ProductController {
         return "Unsuccessfull insert!";
     }
 
+    @RequestMapping(value = "/products/del", method = RequestMethod.DELETE)
+        public String deleteProduct(@RequestBody CartProduct cp){
+        System.out.println("id: " + cp.getProductId());
+
+        if(productRepositoryInterface.deleteProduct(cp)){
+            return "Successfull delete!";
+        }
+        return "Unsuccessfull delete!";
+    }
+
+
 }

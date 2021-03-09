@@ -1,8 +1,10 @@
 package com.volare_automation.springwebshop.controller;
 
+import com.volare_automation.springwebshop.JavaMailConfig;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
+import com.volare_automation.springwebshop.service.EmailServiceInterface;
 import com.volare_automation.springwebshop.service.UserRepoInterface;
 import com.volare_automation.springwebshop.service.UserService;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +33,8 @@ public class UserController {
     @Autowired
     private UserRepositoryInterface userRepositoryInterface;
 
-
+    @Autowired
+    private EmailServiceInterface emailServiceInterface;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers(){
@@ -64,5 +68,11 @@ public class UserController {
     @RequestMapping(value = "/items", method = RequestMethod.GET)
     public List <CartProduct> deleteUser(){
         return userServiceInterface.getList();
+    }
+
+    @RequestMapping(value = "/send", method = RequestMethod.GET)
+    public void sendEmail() throws MessagingException {
+
+        emailServiceInterface.sendMail("robertvolaric973@hotmail.com", "Hi", "Hi there GET!");
     }
 }

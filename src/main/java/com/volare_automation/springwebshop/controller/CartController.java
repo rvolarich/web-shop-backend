@@ -127,6 +127,7 @@ public class CartController {
     public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp){
 
         String id = userServiceInterface.getUserIdFromCookie(request).toString();
+        System.out.println("id confirm order: " + id);
         productRepositoryInterface.confirmCartOrder(cp, id);
     }
 

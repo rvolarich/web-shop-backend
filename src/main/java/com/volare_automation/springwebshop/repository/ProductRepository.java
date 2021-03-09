@@ -294,9 +294,11 @@ public class ProductRepository implements ProductRepositoryInterface {
             }
             System.out.println("result: " + (stock - c.getProductQuantity()));
             if(allowUpdate){
+                System.out.println("bio u confirm order");
                 String query = String.format("DELETE FROM t_%s", id);
                 jdbcTemplate.execute(query);
-                jdbcTemplate.update(sql, (stock - c.getProductQuantity()), c.getProductId());
+                int prodQty = stock - c.getProductQuantity();
+                jdbcTemplate.update(sql, prodQty, c.getProductId());
             }
 
         }

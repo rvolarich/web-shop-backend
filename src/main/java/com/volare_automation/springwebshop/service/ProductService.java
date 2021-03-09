@@ -62,15 +62,31 @@ public class ProductService implements ProductServiceInterface {
         return productRepositoryInterface.deleteCartById(id, idString);
     }
 
+    public double formatPrice(String price){
+        double doublePrice = Double.parseDouble(price);
+        double doublePriceRounded = Math.round(doublePrice * 100.0) /100.0;
+        return doublePriceRounded;
+    }
+
     @Override
     public boolean updateProducts(CartProduct cp) {
 
+        double doublePriceRounded = formatPrice(cp.getProductPriceString());
 
-        double doublePrice = Double.parseDouble(cp.getProductPriceString());
-        double doublePriceRounded = Math.round(doublePrice * 100.0) /100.0;
         boolean sRet = productRepositoryInterface.updateProducts(doublePriceRounded,
                 cp.getProductQuantity(), cp.getProductId());
         if(sRet){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean insertProduct(CartProduct cp) {
+
+        double doublePriceRounded = formatPrice(cp.getProductPriceString());
+        cp.setProductPrice(doublePriceRounded);
+        if(productRepositoryInterface.insertProduct(cp)){
             return true;
         }
         return false;

@@ -18,4 +18,5 @@ public interface ProductServiceInterface {
     public List<Integer> getProductId();
     public List<CartProduct> deleteCartId(CartProduct cp, String idString);
     boolean updateProducts(CartProduct cp);
+    boolean insertProduct(CartProduct cp);
 }

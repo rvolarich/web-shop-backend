@@ -126,30 +126,35 @@ public class ProductRepository implements ProductRepositoryInterface {
         String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
         List<Integer> idList = jdbcTemplate.queryForList(queryForIdList, Integer.class);
         List<CartProduct> listToSave = new ArrayList<CartProduct>();
-        for(int i = 0; i < cpList.size(); i++){
-            for(int k = 0; k < idList.size(); k++){
-                if(cpList.get(i).getProductId() == idList.get(k)){
+        System.out.println("ID list size: " + idList.size());
+        if(idList.size() == 0){
+            postListToCart(cpList, idString);
+        }else {
+            for (int i = 0; i < cpList.size(); i++) {
 
-                    allowPushToSaveList = false;
-                    Integer total = jdbcTemplate.queryForObject(getSingleQty,
-                            new Object[]{cpList.get(i).getProductId()}, Integer.class) + cpList.get(i).getProductQuantity();
-                    jdbcTemplate.update(updateQty, total, cpList.get(i).getProductId());
-                    break;
+                for (int k = 0; k < idList.size(); k++) {
+                    if (cpList.get(i).getProductId() == idList.get(k)) {
+
+                        allowPushToSaveList = false;
+                        Integer total = jdbcTemplate.queryForObject(getSingleQty,
+                                new Object[]{cpList.get(i).getProductId()}, Integer.class) + cpList.get(i).getProductQuantity();
+                        jdbcTemplate.update(updateQty, total, cpList.get(i).getProductId());
+                        break;
 
 //
-                }else{
-                    allowPushToSaveList = true;
+                    } else {
+                        allowPushToSaveList = true;
 
+                    }
+                }
+                if (allowPushToSaveList) {
+                    listToSave.add(cpList.get(i));
                 }
             }
-            if(allowPushToSaveList){
-                listToSave.add(cpList.get(i));
-            }
+
+            postListToCart(listToSave, idString);
+
         }
-
-        postListToCart(listToSave, idString);
-
-
     }
 
     public void postListToCart(List<CartProduct> cpList, String idString){
@@ -304,7 +309,7 @@ public class ProductRepository implements ProductRepositoryInterface {
                        "    productname character varying(100), " +
                        "    productdescription character varying(511), " +
                        "    productquantity integer," +
-                       "    productprice numeric(6,2)," +
+                       "    productprice numeric(16,2)," +
                        "    productimage character varying," +
                        "    productstock integer);");
 

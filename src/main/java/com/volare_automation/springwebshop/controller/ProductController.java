@@ -77,15 +77,13 @@ public class ProductController {
         if(productServiceInterface.updateProducts(cp)){
             return "Product successfully updated!";
         }
-
-
         return "Error updating product!";
     }
 
     @RequestMapping(value = "/products/insert", method = RequestMethod.POST)
     public String insertProducts(@RequestBody CartProduct cp){
 
-        if(productRepositoryInterface.insertProduct(cp)){
+        if(productServiceInterface.insertProduct(cp)){
             return "Product added successfully!";
         }
 

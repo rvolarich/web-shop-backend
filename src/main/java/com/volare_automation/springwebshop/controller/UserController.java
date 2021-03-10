@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.controller;
 
 import com.volare_automation.springwebshop.JavaMailConfig;
 import com.volare_automation.springwebshop.model.CartProduct;
+import com.volare_automation.springwebshop.model.Mail;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.EmailServiceInterface;
@@ -18,8 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true", methods = {
@@ -71,8 +75,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/send", method = RequestMethod.GET)
-    public void sendEmail() throws MessagingException {
+    public void sendEmail() throws MessagingException, IOException {
 
-        emailServiceInterface.sendMail("robertvolaric973@hotmail.com", "Hi", "Hi there GET!");
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put("name", "John Michel!");
+        properties.put("location", "Sri Lanka");
+        properties.put("sign", "Java Developer");
+
+        Mail mail = new Mail();
+        mail.setFrom("robertvolaric973@gmail.com");
+        mail.setTo("robertvolaric973@hotmail.com");
+        mail.setSubject("hi");
+        mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
+
+        emailServiceInterface.sendMail(mail);
     }
 }

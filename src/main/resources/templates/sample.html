@@ -12,28 +12,116 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            font-size: 48px;
+            font-size: 12px;
+        }
+
+        hr{
+            border: none;
+            height: 1px;
+            width:100%;
+
+            background-color: gray;
+        }
+
+        .hrHead{
+            border: none;
+            height: 2px;
+            width:100%;
+
+            background-color: gray;
+        }
+        div{
+
+        }
+
+        .divItem{
+            border: none;
+            width: 29%;
+            float: left;
+        }
+
+        .divNumbers{
+            border: none;
+            width: 13%;
+            float: left;
+        }
+
+        .tableHead{
+            font-weight: bold;
+
+        }
+        .right {
+            position: absolute;
+            right: 0px;
+
+
+
         }
     </style>
 </head>
 <body>
-<p th:text="${'Hello Dear ' + name}"></p>
 
-<p th:if="${name.length() > 5}">
-    Wow! You've got a long name (more than 5 chars)!
-</p>
-<p>
-    You have been successfully subscribed to the <b>Fake newsletter</b> on
-    <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
-</p>
-<p th:text="${'You are from ' + location}"> </p>
-<p>
-    You can find <b>your inlined image</b> just below this text.
-</p>
-<p>
+<p>Thank you for your purchase!</p>
+
+<div style="height: 20px"></div>
+<br />
+<br />
+
+<div class="divItem">
+    <td><span class="tableHead">Product name</span></td>
+</div>
+<div class="divItem">
+    <td><span class="tableHead">Product description</span></td>
+</div>
+<div class="divNumbers">
+    <td><span class="tableHead">Price</span></td>
+</div>
+<div class="divNumbers">
+    <td><span class="tableHead">Quantity</span></td>
+</div>
+<div class="divNumbers">
+    <td><span class="tableHead">Total</span></td>
+</div>
+<br /><hr class="hrHead"><br />
+
+<tr th:each="Products, iterator : ${list}" >
+    <div class="divItem">
+<td th:text="${iterator.index + 1} + '. ' + ${Products.productName}">Product name</td>
+    </div>
+    <div class="divItem">
+    <td th:text="${Products.productDescription}">Product name</td>
+    </div>
+        <div class="divNumbers">
+    <td th:text="${Products.productPrice}">Product name</td>
+        </div>
+    <div class="divNumbers">
+        <td th:text="${Products.productQuantity}">Product name</td>
+    </div>
+    <div class="divNumbers">
+        <td th:text="${Products.productQuantity}">Product name</td>
+    </div>
+    <br /><hr><br />
+</tr>
 
 
-</p>
+<div style="width:16%;float: right;">
+    <td>125.00</td>
+</div>
+<div style="width:14%;float: right;">
+    <td>Shipping:</td>
+</div>
+<br />
+<div style="margin-top: 15px; font-weight: bold">
+<div style="width:16%;float: right;">
+    <td th:text="${sum}"></td>
+</div>
+<div style="width:14%;float: right;">
+    <td>Total for payment:</td>
+</div>
+    <br />
+    <hr>
+</div>
+
 
 </body>
 </html>

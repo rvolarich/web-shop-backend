@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.model;
 
+import java.util.List;
 import java.util.Map;
 
 public class Mail {
@@ -19,6 +20,7 @@ public class Mail {
 
         private String template;
         private Map<String, Object> props;
+        //private List<Products> props;
 
         public HtmlTemplate(String template, Map<String, Object> props) {
             this.template = template;
@@ -33,6 +35,13 @@ public class Mail {
             this.template = template;
         }
 
+//        public List<Products> getProps() {
+//            return props;
+//        }
+//
+//        public void setProps(List<Products> props) {
+//            this.props = props;
+//        }
         public Map<String, Object> getProps() {
             return props;
         }

@@ -3,14 +3,19 @@ package com.volare_automation.springwebshop.controller;
 import com.volare_automation.springwebshop.JavaMailConfig;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Mail;
+import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.model.User;
+import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
 import com.volare_automation.springwebshop.service.EmailServiceInterface;
 import com.volare_automation.springwebshop.service.UserRepoInterface;
 import com.volare_automation.springwebshop.service.UserService;
 import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -39,6 +44,9 @@ public class UserController {
 
     @Autowired
     private EmailServiceInterface emailServiceInterface;
+
+    @Autowired
+    private ProductRepositoryInterface productRepositoryInterface;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers(){
@@ -75,19 +83,39 @@ public class UserController {
     }
 
     @RequestMapping(value = "/send", method = RequestMethod.GET)
-    public void sendEmail() throws MessagingException, IOException {
 
+    //@GetMapping("/send")
+    public String sendEmail() throws MessagingException, IOException {
+
+
+        double total = 0.00;
+        List<Products> list = productRepositoryInterface.getAllProducts();
+
+        for (int i = 0; i < list.size(); i++) {
+            total += list.get(i).getProductPrice();
+
+        }
+        System.out.println("total " + total);
+//        list.add("Mila");
+//        list.add("Andi");
+//        list.add("mama");
+//        list.add("tata");
+//
+//        model.addAttribute("listUsers", list);
+    //System.out.println("usernames " + user.getUsername());
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("name", "John Michel!");
-        properties.put("location", "Sri Lanka");
-        properties.put("sign", "Java Developer");
-
+        properties.put("list", list);
+        properties.put("sum", total);
+//        properties.put("location", "Sri Lanka");
+//        properties.put("sign", "Java Developer");
+//
         Mail mail = new Mail();
-        mail.setFrom("robertvolaric973@gmail.com");
+        mail.setFrom("noreply@gmail.com");
         mail.setTo("robertvolaric973@hotmail.com");
         mail.setSubject("hi");
         mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
 
         emailServiceInterface.sendMail(mail);
+        return "sample";
     }
 }

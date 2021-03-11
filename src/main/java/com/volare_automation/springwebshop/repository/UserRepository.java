@@ -3,6 +3,7 @@ package com.volare_automation.springwebshop.repository;
 //import com.volare_automation.springwebshop.model.CartProductTest;
 import com.volare_automation.springwebshop.model.User;
 //import com.volare_automation.springwebshop.service.UserRowMapper;
+import com.volare_automation.springwebshop.service.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,13 +26,14 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public List<User> getAllUsers() {
-//        String sql = "SELECT * FROM customers";
-//
-          List<User> customers = new ArrayList<>();//jdbcTemplate.query(
-//                sql,
-//                new UserRowMapper());
-//
-        return customers;
+       String sql = "SELECT * FROM users";
+
+          List<User> users = new ArrayList<>();//
+         jdbcTemplate.query(
+               sql,
+               new UserRowMapper());
+
+        return users;
     }
 
     @Override

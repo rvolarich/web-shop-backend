@@ -82,20 +82,35 @@ public class UserController {
         return userServiceInterface.getList();
     }
 
-    @RequestMapping(value = "/send", method = RequestMethod.GET)
+    @RequestMapping(value = "/req", method = RequestMethod.POST)
+    public String reqParam(@RequestBody List<CartProduct> cpList){
+        System.out.println("cartProduct: " + cpList.get(1).getProductName());
+        System.out.println("email: " + cpList.get(cpList.size()-1).getEmail());
+        System.out.println("name: " + cpList.get(cpList.size()-1).getNameName());
+        return "hi";
+    }
+
+    @RequestMapping(value = "/send", method = RequestMethod.POST)
 
     //@GetMapping("/send")
-    public String sendEmail() throws MessagingException, IOException {
+    public String sendEmail(@RequestBody List<CartProduct> cpList)
+            throws MessagingException, IOException {
 
+        List<CartProduct> cartList = cpList;
+        String nameName = cartList.get(cartList.size()-1).getNameName();
+        String email = cartList.get(cartList.size()-1).getEmail();
+
+        cartList.remove(cartList.size()-1);
 
         double total = 0.00;
-        List<Products> list = productRepositoryInterface.getAllProducts();
+        //List<Products> list = productRepositoryInterface.getAllProducts();
 
-        for (int i = 0; i < list.size(); i++) {
-            total += list.get(i).getProductPrice();
-
+        for (int i = 0; i < cpList.size(); i++) {
+            total += (cartList.get(i).getProductPrice()*cartList.get(i).getProductQuantity());
         }
-        System.out.println("total " + total);
+
+        double totalForPayment = total + 125;
+//        System.out.println("total " + total);
 //        list.add("Mila");
 //        list.add("Andi");
 //        list.add("mama");
@@ -104,14 +119,15 @@ public class UserController {
 //        model.addAttribute("listUsers", list);
     //System.out.println("usernames " + user.getUsername());
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("list", list);
-        properties.put("sum", total);
+        properties.put("list", cartList);
+        properties.put("sum", totalForPayment);
+        properties.put("nameName", nameName);
 //        properties.put("location", "Sri Lanka");
 //        properties.put("sign", "Java Developer");
 //
         Mail mail = new Mail();
         mail.setFrom("noreply@gmail.com");
-        mail.setTo("robertvolaric973@hotmail.com");
+        mail.setTo(email);
         mail.setSubject("hi");
         mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
 

@@ -61,6 +61,8 @@
 </head>
 <body>
 
+<p th:text="'Hi ' + ${nameName} + ','" ></p>
+
 <p>Thank you for your purchase!</p>
 
 <div style="height: 20px"></div>
@@ -98,7 +100,7 @@
         <td th:text="${Products.productQuantity}">Product name</td>
     </div>
     <div class="divNumbers">
-        <td th:text="${Products.productQuantity}">Product name</td>
+        <td th:text="${Products.productQuantity * Products.productPrice}">Product name</td>
     </div>
     <br /><hr><br />
 </tr>

@@ -12,6 +12,8 @@ public class CartProduct {
     private Integer totalCartQty;
     private Integer productStock;
     private String productPriceString;
+    private String nameName;
+    private String email;
 
     public CartProduct() {
     }
@@ -25,6 +27,7 @@ public class CartProduct {
         this.productPrice = productPrice;
         this.productImage = productImage;
         this.productStock = productStock;
+
     }
 
     public int getProductId() {
@@ -105,5 +108,21 @@ public class CartProduct {
 
     public void setProductPriceString(String productPriceString) {
         this.productPriceString = productPriceString;
+    }
+
+    public String getNameName() {
+        return nameName;
+    }
+
+    public void setNameName(String nameName) {
+        this.nameName = nameName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

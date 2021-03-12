@@ -4,6 +4,7 @@ public class UserAuthDataModel {
 
     private String username;
     private String loginStatus;
+    private String nameName;
     private boolean isLogged;
 
 
@@ -33,5 +34,13 @@ public class UserAuthDataModel {
 
     public void setLoginStatus(String loginStatus) {
         this.loginStatus = loginStatus;
+    }
+
+    public String getNameName() {
+        return nameName;
+    }
+
+    public void setNameName(String nameName) {
+        this.nameName = nameName;
     }
 }

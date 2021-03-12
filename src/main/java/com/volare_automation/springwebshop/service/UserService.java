@@ -155,6 +155,12 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public String getName(HttpServletRequest request) {
+
+        return userRepositoryInterface.getNameById(getUserIdFromCookie(request));
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepositoryInterface.getAllUsers();
     }

@@ -50,6 +50,14 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
+    public User getUserById(int id) {
+
+        String query = "SELECT username, name, surname, address, city, zip, country FROM users WHERE userid=?";
+        User userData = jdbcTemplate.queryForObject(query, new Object[]{id}, new UserRowMapper());
+        return userData;
+    }
+
+    @Override
     public String queryForSessionId(User user){
         String query = "SELECT sessionid FROM users WHERE username=?";
         String id = jdbcTemplate.queryForObject(query, new Object[]{user.getUsername()},
@@ -110,8 +118,9 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public boolean regUser(User user) {
 
-        String sql = "INSERT INTO users (username, password, role, enabled) VALUES (?,?,?,?)";
-        int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), "ROLE_USER", "true");
+        String sql = "INSERT INTO users (username, password, role, enabled, name, surname) VALUES (?,?,?,?,?,?)";
+        int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(),
+                "ROLE_USER", "true", user.getNameName(), user.getSurname());
         if(i == 1){
             System.out.println("User registered");
             return true;
@@ -177,9 +186,20 @@ public class UserRepository implements UserRepositoryInterface{
         String queryId = "SELECT username FROM users WHERE userid=?";
         if(id != 0) {
             username = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
-            System.out.println("USERNAME ID = " + id);
+
         }
         return username;
+    }
+
+    @Override
+    public String getNameById(Integer id) {
+        String name = "";
+        String queryId = "SELECT name FROM users WHERE userid=?";
+        if(id != 0) {
+            name = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
+        }
+        System.out.println("name from data: " + name);
+        return name;
     }
 
     @Override

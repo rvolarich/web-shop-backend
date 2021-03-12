@@ -10,7 +10,7 @@ public interface UserRepositoryInterface {
 
     public List<User> getAllUsers();
     public void saveUser(User user);
-    //public User getUserById(int id);
+    public User getUserById(int id);
     public void updateUser(User user, Integer id);
     public void deleteUserById(int id);
     //public boolean authUser(User user);
@@ -26,6 +26,7 @@ public interface UserRepositoryInterface {
     List<String> listOfUsernames();
     String userEnabled(Integer id);
     void saveCartproductToSession(String sessionId);
+    String getNameById(Integer id);
 
     //public void postCartProd(CartProductTest c);
 

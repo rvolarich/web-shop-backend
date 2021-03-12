@@ -53,9 +53,9 @@ public class UserController {
         return userServiceInterface.getAllUsers();
     }
 
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public User getUserById(@PathVariable int id){
-        return userServiceInterface.getUser(id);
+    @RequestMapping(value = "/get/user", method = RequestMethod.GET)
+    public User getUserById(HttpServletRequest request){
+        return userRepositoryInterface.getUserById(userServiceInterface.getUserIdFromCookie(request));
     }
 
     @RequestMapping(value = "users/save", method = RequestMethod.POST)

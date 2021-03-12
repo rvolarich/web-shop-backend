@@ -45,7 +45,7 @@ public class UserAuth {
     public UserAuthDataModel loggedIn(HttpServletRequest request) {
 
         UserAuthDataModel userAuthDataModel = new UserAuthDataModel();
-        userAuthDataModel.setUsername(userServiceInterface.getUserName(request));
+        userAuthDataModel.setNameName(userServiceInterface.getName(request));
         userAuthDataModel.setLogged(false);
         if(userServiceInterface.testUserLogged(request)){
             userAuthDataModel.setLogged(true);

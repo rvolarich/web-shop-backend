@@ -14,22 +14,23 @@ public class User {
     private String city;
     private String country;
 
-    public User(int userid, String username, String password,
-                String isEnabled, String nameName, String surname,
-                String email, String address, String zip, String city, String country) {
 
-        this.userid = userid;
-        this.username = username;
-        this.password = password;
-        this.isEnabled = isEnabled;
-        this.nameName = nameName;
-        this.surname = surname;
-        this.email = email;
-        this.address = address;
-        this.zip = zip;
-        this.city = city;
-        this.country = country;
-    }
+//    public User(int userid, String username, String password,
+//                String isEnabled, String nameName, String surname,
+//                String email, String address, String zip, String city, String country) {
+//
+//        this.userid = userid;
+//        this.username = username;
+//        this.password = password;
+//        this.isEnabled = isEnabled;
+//        this.nameName = nameName;
+//        this.surname = surname;
+//        this.email = email;
+//        this.address = address;
+//        this.zip = zip;
+//        this.city = city;
+//        this.country = country;
+//    }
 
     public User() {
     }

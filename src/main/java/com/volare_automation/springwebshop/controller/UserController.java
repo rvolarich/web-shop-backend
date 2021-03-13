@@ -66,10 +66,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "users/update", method = RequestMethod.PUT)
-    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody User u){
+    public String updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody User u){
 
         Integer id = userServiceInterface.getUserIdFromCookie(request);
-        userServiceInterface.updateUser(u, id);
+        if(userServiceInterface.updateUser(u, id)){
+            return "Successfully updated!";
+        }
+        return "Error updating user!";
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)

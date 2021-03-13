@@ -5,7 +5,6 @@ import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
-import org.checkerframework.checker.units.qual.Acceleration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -260,10 +259,13 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
-    public void updateUser(User user, Integer id) {
+    public boolean updateUser(User user, Integer id) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepositoryInterface.updateUser(user, id);
+        if(userRepositoryInterface.updateUser(user, id)){
+            return true;
+        }
+        return false;
     }
 
 //    @Override

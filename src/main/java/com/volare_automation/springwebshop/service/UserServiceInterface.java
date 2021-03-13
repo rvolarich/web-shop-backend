@@ -12,7 +12,7 @@ public interface UserServiceInterface {
     List<User> getAllUsers();
     public User getUser(int id);
     public void saveUser(User user);
-    public void updateUser(User user, Integer id);
+    public boolean updateUser(User user, Integer id);
     public void deleteUser(int id);
     public String getSessionId(User user);
     public List<CartProduct> getList();

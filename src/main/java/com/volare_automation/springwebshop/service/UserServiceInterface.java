@@ -13,7 +13,7 @@ public interface UserServiceInterface {
     public User getUser(int id);
     public void saveUser(User user);
     public boolean updateUser(User user, Integer id);
-    public void deleteUser(int id);
+    public boolean deleteUser(HttpServletRequest request);
     public String getSessionId(User user);
     public List<CartProduct> getList();
     void printUser(User u);

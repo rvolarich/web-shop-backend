@@ -12,7 +12,7 @@ public interface UserRepositoryInterface {
     public void saveUser(User user);
     public User getUserById(int id);
     public boolean updateUser(User user, Integer id);
-    public void deleteUserById(int id);
+    public boolean deleteUserById(int id);
     //public boolean authUser(User user);
     public boolean regUser(User user);
     public void userLogin(User user);

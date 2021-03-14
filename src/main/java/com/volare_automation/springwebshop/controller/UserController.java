@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true", methods = {
-        RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true",
+            methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 
 public class UserController {
 
@@ -75,9 +75,17 @@ public class UserController {
         return "Error updating user!";
     }
 
-    @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable int id){
-        userServiceInterface.deleteUser(id);
+    @RequestMapping(value = "/user/del", method = RequestMethod.GET)
+    public boolean deleteUser(HttpServletRequest request){
+
+//        if(request.getCookies().length == 0){
+//
+//        }
+
+        if(userServiceInterface.deleteUser(request)){
+            return true;
+        }
+        return false;
     }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)

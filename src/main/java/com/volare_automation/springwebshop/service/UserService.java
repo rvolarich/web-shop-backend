@@ -284,8 +284,13 @@ public class UserService implements UserServiceInterface{
 //    }
 
     @Override
-    public void deleteUser(int id) {
-        userRepositoryInterface.deleteUserById(id);
+    public boolean deleteUser(HttpServletRequest request) {
+
+        Integer id = getUserIdFromCookie(request);
+        if(userRepositoryInterface.deleteUserById(id)){
+            return true;
+        }
+        return false;
     }
 
 //    @Override

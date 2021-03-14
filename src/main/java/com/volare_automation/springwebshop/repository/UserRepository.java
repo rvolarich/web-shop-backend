@@ -95,9 +95,9 @@ public class UserRepository implements UserRepositoryInterface{
          int i = jdbcTemplate.update(sql, user.getNameName(), user.getSurname(), user.getEmail(),
                     user.getPassword(), user.getAddress(), user.getZip(), user.getCity(),
                     user.getCountry(), id);
-//         if(i == 1){
-//             return true;
-//         }
+         if(i == 1){
+             return true;
+         }
 
          return false;
             //System.out.println("user updated");
@@ -108,13 +108,16 @@ public class UserRepository implements UserRepositoryInterface{
 
 
     @Override
-    public void deleteUserById(int id) {
-        String sql = "DELETE FROM customers WHERE id = ?";
+    public boolean deleteUserById(int id) {
+        String sql = "DELETE FROM users WHERE userid = ?";
         Object [] userObject = new Object[]{id};
+        System.out.println("user id" + id);
         int del = jdbcTemplate.update(sql, userObject);
         if(del > 0){
-            System.out.println("Deleted");
+            return true;
         }
+        System.out.println("user deleted");
+        return false;
     }
 
     @Override
@@ -241,18 +244,32 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public Map<String, Object> testUserLogged(Integer userId) {
+        boolean allowTest = false;
         String sql = "SELECT enabled, sessionid FROM users WHERE userid=?";
         Map<String, Object> result = new HashMap<String, Object>();
-        if(userId != 0) {
-            result = jdbcTemplate
-                    .queryForMap(sql, new Object[]{userId});
+        for(int i = 0; i < listOfUserIds().size(); i++){
+            if(listOfUserIds().get(i) == userId){
+                allowTest = true;
+            }
+        }
+        if(allowTest) {
+            if (userId != 0) {
+                result = jdbcTemplate
+                        .queryForMap(sql, new Object[]{userId});
 //        for(Map.Entry m:result.entrySet()){
 //            System.out.println(m.getKey()+" "+m.getValue());
 //        }
+            }
         }
-
         return result;
 
+    }
+
+    public List<Integer> listOfUserIds(){
+
+        String sql = "SELECT userid FROM users";
+        List<Integer> userIdList = jdbcTemplate.queryForList(sql, Integer.class);
+        return userIdList;
     }
 
     @Override

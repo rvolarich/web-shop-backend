@@ -2,6 +2,7 @@ package com.volare_automation.springwebshop.service;
 
 //import com.volare_automation.springwebshop.model.CartProductTest;
 import com.volare_automation.springwebshop.model.CartProduct;
+import com.volare_automation.springwebshop.model.Mail;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.repository.UserRepositoryInterface;
@@ -9,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class UserService implements UserServiceInterface{
@@ -35,6 +35,9 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     ProductRepositoryInterface productRepositoryInterface;
+
+    @Autowired
+    EmailServiceInterface emailServiceInterface;
 
     List<CartProduct> list = new ArrayList<>();
 
@@ -222,14 +225,31 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
-    public boolean registerUser(HttpServletRequest request, User user) {
+    public boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException {
 
         if(!userExists(user)){
             return false;
         }
-
+        String link = generateSessionId();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepositoryInterface.regUser(user);
+
+        if(userRepositoryInterface.regUser(user, link)) {
+
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put("name", user.getNameName());
+            userMap.put("link", link);
+
+            Mail mail = new Mail();
+            mail.setFrom("noreply@gmail.com");
+            mail.setTo("robertvolaric973@hotmail.com");
+            mail.setSubject("hi");
+            mail.setHtmlTemplate(new Mail.HtmlTemplate("activationMail", userMap));
+
+            emailServiceInterface.sendMail(mail);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

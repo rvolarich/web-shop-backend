@@ -129,7 +129,7 @@ public class UserController {
 //
 //        model.addAttribute("listUsers", list);
     //System.out.println("usernames " + user.getUsername());
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put("list", cartList);
         properties.put("sum", totalForPayment);
         properties.put("nameName", nameName);

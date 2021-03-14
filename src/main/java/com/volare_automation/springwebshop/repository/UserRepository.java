@@ -121,11 +121,12 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
-    public boolean regUser(User user) {
+    public boolean regUser(User user, String activationToken) {
 
-        String sql = "INSERT INTO users (username, password, role, enabled, name, surname) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO users (username, password, role, enabled, name, surname, activationtoken) " +
+                "VALUES (?,?,?,?,?,?,?)";
         int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(),
-                "ROLE_USER", "true", user.getNameName(), user.getSurname());
+                "ROLE_USER", "true", user.getNameName(), user.getSurname(), activationToken);
         if(i == 1){
             System.out.println("User registered");
             return true;

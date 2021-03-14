@@ -14,7 +14,7 @@ public interface UserRepositoryInterface {
     public boolean updateUser(User user, Integer id);
     public boolean deleteUserById(int id);
     //public boolean authUser(User user);
-    public boolean regUser(User user);
+    public boolean regUser(User user, String activationToken);
     public void userLogin(User user);
     public String queryForSessionId(User user);
     public void saveSessionId(User user, String sessionId);
@@ -27,6 +27,7 @@ public interface UserRepositoryInterface {
     String userEnabled(Integer id);
     void saveCartproductToSession(String sessionId);
     String getNameById(Integer id);
+
 
     //public void postCartProd(CartProductTest c);
 

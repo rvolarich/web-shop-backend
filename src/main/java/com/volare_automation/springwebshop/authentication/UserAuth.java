@@ -8,6 +8,7 @@ import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -143,13 +144,10 @@ public class UserAuth {
     }
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
-    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException, MessagingException {
 
 
-        /*if(!userServiceInterface.userExists(user)){
-            System.out.println("user exists");
-            return false;
-        }*/
+
         return userServiceInterface.registerUser(request, user);
     }
 

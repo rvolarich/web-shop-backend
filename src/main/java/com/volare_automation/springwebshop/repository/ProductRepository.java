@@ -281,25 +281,33 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     @Override
     public void confirmCartOrder(List<CartProduct> cp, String id) {
-        boolean allowUpdate = true;
 
-        String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
-        String sql = "UPDATE products SET productquantity = ? WHERE productid = ?";
-        for(CartProduct c:cp){
-            Object [] tmp = {c.getProductId(), c.getProductQuantity()};
-            Integer stock = jdbcTemplate.queryForObject(getProductStock,
-                    new Object[]{c.getProductId()}, Integer.class);
-            if(stock - c.getProductQuantity() < 0){
-                allowUpdate = false;
+        try {
+            boolean allowUpdate = true;
+
+            String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
+            String sql = "UPDATE products SET productquantity = ? WHERE productid = ?";
+            for (CartProduct c : cp) {
+                //Object [] tmp = {c.getProductId(), c.getProductQuantity()};
+                Integer stock = jdbcTemplate.queryForObject(getProductStock,
+                        new Object[]{c.getProductId()}, Integer.class);
+                if (stock - c.getProductQuantity() < 0) {
+                    allowUpdate = false;
+                }
+                System.out.println("result: " + (stock - c.getProductQuantity()));
+                if (allowUpdate) {
+                    if (!id.equals("guest")) {
+                        String query = String.format("DELETE FROM t_%s", id);
+                        jdbcTemplate.execute(query);
+                        System.out.println("bio u delete user caert");
+                    }
+                    int prodQty = stock - c.getProductQuantity();
+                    jdbcTemplate.update(sql, prodQty, c.getProductId());
+                    allowUpdate = true;
+                }
+
             }
-            System.out.println("result: " + (stock - c.getProductQuantity()));
-            if(allowUpdate){
-                System.out.println("bio u confirm order");
-                String query = String.format("DELETE FROM t_%s", id);
-                jdbcTemplate.execute(query);
-                int prodQty = stock - c.getProductQuantity();
-                jdbcTemplate.update(sql, prodQty, c.getProductId());
-            }
+        }catch (Exception e){
 
         }
     }

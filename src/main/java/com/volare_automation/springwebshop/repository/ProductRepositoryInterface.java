@@ -26,4 +26,5 @@ public interface ProductRepositoryInterface {
     boolean updateProducts(double price, Integer quantity, Integer id);
     boolean insertProduct(CartProduct cp);
     boolean deleteProduct(CartProduct cp);
+
 }

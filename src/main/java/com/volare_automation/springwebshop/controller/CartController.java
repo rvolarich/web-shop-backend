@@ -126,9 +126,23 @@ public class CartController {
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
     public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp){
 
-        String id = userServiceInterface.getUserIdFromCookie(request).toString();
-        System.out.println("id confirm order: " + id);
-        productRepositoryInterface.confirmCartOrder(cp, id);
+
+        
+        if(request.getCookies() != null) {
+            if (userServiceInterface.testUserLogged(request)) {
+                String id = userServiceInterface.getUserIdFromCookie(request).toString();
+                System.out.println("id confirm order: " + id);
+                productRepositoryInterface.confirmCartOrder(cp, id);
+            }
+            else{
+                productRepositoryInterface.confirmCartOrder(cp, "guest");
+                System.out.println("bio u guest!");
+            }
+        }
+        else{
+            productRepositoryInterface.confirmCartOrder(cp, "guest");
+            System.out.println("bio u guest coockies not null!");
+        }
     }
 
 }

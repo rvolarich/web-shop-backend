@@ -27,6 +27,8 @@ public interface UserRepositoryInterface {
     String userEnabled(Integer id);
     void saveCartproductToSession(String sessionId);
     String getNameById(Integer id);
+    boolean activateUser(String token);
+
 
 
     //public void postCartProd(CartProductTest c);

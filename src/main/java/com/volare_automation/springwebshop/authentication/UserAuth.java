@@ -146,9 +146,15 @@ public class UserAuth {
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException, MessagingException {
 
-
-
         return userServiceInterface.registerUser(request, user);
+    }
+
+    @RequestMapping(value = "/activate", method = RequestMethod.GET)
+    public boolean activateAccount(@RequestParam String token){
+
+        System.out.println("token " + token);
+        userRepositoryInterface.activateUser(token);
+        return true;
     }
 
     }

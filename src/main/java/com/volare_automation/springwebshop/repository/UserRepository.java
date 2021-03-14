@@ -126,7 +126,7 @@ public class UserRepository implements UserRepositoryInterface{
         String sql = "INSERT INTO users (username, password, role, enabled, name, surname, activationtoken) " +
                 "VALUES (?,?,?,?,?,?,?)";
         int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(),
-                "ROLE_USER", "true", user.getNameName(), user.getSurname(), activationToken);
+                "ROLE_USER", "false", user.getNameName(), user.getSurname(), activationToken);
         if(i == 1){
             System.out.println("User registered");
             return true;
@@ -206,6 +206,18 @@ public class UserRepository implements UserRepositoryInterface{
         }
         System.out.println("name from data: " + name);
         return name;
+    }
+
+    @Override
+    public boolean activateUser(String token) {
+
+        String sql = "UPDATE users SET enabled=? WHERE activationtoken=?";
+        int i = jdbcTemplate.update(sql, "true", token);
+
+        if(i > 0){
+            return true;
+        }
+        return false;
     }
 
     @Override

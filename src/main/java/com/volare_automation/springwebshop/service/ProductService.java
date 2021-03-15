@@ -111,6 +111,7 @@ public class ProductService implements ProductServiceInterface {
  //       List<CartProduct> cartListRounded = new ArrayList<>();
         String nameName = cartList.get(cartList.size()-1).getNameName();
         String email = cartList.get(cartList.size()-1).getEmail();
+        System.out.println("Email adresa: " + email);
         cartList.remove(cartList.size()-1);
 
         DecimalFormat twoDecimal = new DecimalFormat("#.00");
@@ -139,7 +140,7 @@ public class ProductService implements ProductServiceInterface {
         mail.setTo(email);
         mail.setSubject("hi");
         mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
-
+        System.out.println("Email adresa nakon: " + mail.getTo());
         emailServiceInterface.sendMail(mail);
 
         productRepositoryInterface.confirmCartOrder(cartList, id);

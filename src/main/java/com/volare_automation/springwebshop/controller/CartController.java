@@ -143,10 +143,10 @@ public class CartController {
                 System.out.println("bio u guest!");
             }
         }
-        else{
-            productServiceInterface.confirmCartSendMail(cp, "guest");
-            System.out.println("bio u guest coockies null!");
-        }
+//        else{
+//            productServiceInterface.confirmCartSendMail(cp, "guest");
+//            System.out.println("bio u guest coockies null!");
+//        }
     }
 
 }

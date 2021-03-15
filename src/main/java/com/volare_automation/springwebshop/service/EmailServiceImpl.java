@@ -40,6 +40,7 @@ public class EmailServiceImpl implements EmailServiceInterface{
                 StandardCharsets.UTF_8.name());
 
         String html = getHtmlContent(mail);
+
         //System.out.println("HTML content: " + html);
 
         String outputFolder = System.getProperty("user.home") + File.separator + "thymeleaf.pdf";
@@ -52,13 +53,15 @@ public class EmailServiceImpl implements EmailServiceInterface{
 
         outputStream.close();
 
-        messageHelper.setTo(mail.getTo());
-        messageHelper.setFrom(mail.getFrom());
-        messageHelper.setSubject(mail.getSubject());
-        messageHelper.setText(html, true);
+        if(mail.getTo() != null) {
+            messageHelper.setTo(mail.getTo());
+            System.out.println("Mail nakon getto: " + mail.getTo());
+            messageHelper.setFrom(mail.getFrom());
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(html, true);
 
-        javaMailSender.send(mimeMessage);
-
+            javaMailSender.send(mimeMessage);
+        }
     }
 
     private String getHtmlContent(Mail mail){

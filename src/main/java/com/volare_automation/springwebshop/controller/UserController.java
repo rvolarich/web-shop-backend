@@ -111,7 +111,7 @@ public class UserController {
         String nameName = cartList.get(cartList.size()-1).getNameName();
         String email = cartList.get(cartList.size()-1).getEmail();
 
-        cartList.remove(cartList.size()-1);
+
 
         double total = 0.00;
         //List<Products> list = productRepositoryInterface.getAllProducts();

@@ -7,8 +7,10 @@ import com.volare_automation.springwebshop.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -124,7 +126,7 @@ public class CartController {
     }
 
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
-    public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp){
+    public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp) throws IOException, MessagingException {
 
 
         
@@ -132,16 +134,17 @@ public class CartController {
             if (userServiceInterface.testUserLogged(request)) {
                 String id = userServiceInterface.getUserIdFromCookie(request).toString();
                 System.out.println("id confirm order: " + id);
-                productRepositoryInterface.confirmCartOrder(cp, id);
+                productServiceInterface.confirmCartSendMail(cp, id);
             }
             else{
-                productRepositoryInterface.confirmCartOrder(cp, "guest");
+                productServiceInterface.confirmCartSendMail(cp, "guest");
+                System.out.println(("update cart return: " + productServiceInterface.confirmCartSendMail(cp, "guest")));
                 System.out.println("bio u guest!");
             }
         }
         else{
-            productRepositoryInterface.confirmCartOrder(cp, "guest");
-            System.out.println("bio u guest coockies not null!");
+            productServiceInterface.confirmCartSendMail(cp, "guest");
+            System.out.println("bio u guest coockies null!");
         }
     }
 

@@ -280,36 +280,43 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public void confirmCartOrder(List<CartProduct> cp, String id) {
+    public boolean confirmCartOrder(List<CartProduct> cp, String id) {
 
-        try {
+        Integer confirmUpdate = 0;
+        List<Integer> updateList = new ArrayList();
+        //try {
             boolean allowUpdate = true;
 
             String getProductStock = "SELECT productquantity FROM products WHERE productid = ?";
             String sql = "UPDATE products SET productquantity = ? WHERE productid = ?";
-            for (CartProduct c : cp) {
+            for (int i = 0; i < cp.size(); i++) {
                 //Object [] tmp = {c.getProductId(), c.getProductQuantity()};
                 Integer stock = jdbcTemplate.queryForObject(getProductStock,
-                        new Object[]{c.getProductId()}, Integer.class);
-                if (stock - c.getProductQuantity() < 0) {
+                        new Object[]{cp.get(i).getProductId()}, Integer.class);
+                if (stock - cp.get(i).getProductQuantity() < 0) {
                     allowUpdate = false;
                 }
-                System.out.println("result: " + (stock - c.getProductQuantity()));
+ //               System.out.println("result: " + (stock - c.getProductQuantity()));
                 if (allowUpdate) {
                     if (!id.equals("guest")) {
                         String query = String.format("DELETE FROM t_%s", id);
                         jdbcTemplate.execute(query);
                         System.out.println("bio u delete user caert");
                     }
-                    int prodQty = stock - c.getProductQuantity();
-                    jdbcTemplate.update(sql, prodQty, c.getProductId());
+                    int prodQty = stock - cp.get(i).getProductQuantity();
+                    confirmUpdate = jdbcTemplate.update(sql, prodQty, cp.get(i).getProductId());
                     allowUpdate = true;
+                    updateList.add(confirmUpdate);
+                    System.out.println("update list: " + updateList);
                 }
 
             }
-        }catch (Exception e){
+            System.out.println("fgdd list: " + updateList);
 
-        }
+            return true;
+//        }catch (Exception e){
+//
+//        }
     }
 
     @Override

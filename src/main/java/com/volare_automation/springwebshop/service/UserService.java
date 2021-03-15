@@ -241,7 +241,7 @@ public class UserService implements UserServiceInterface{
 
             Mail mail = new Mail();
             mail.setFrom("noreply@gmail.com");
-            mail.setTo("robertvolaric973@hotmail.com");
+            mail.setTo(user.getUsername());
             mail.setSubject("hi");
             mail.setHtmlTemplate(new Mail.HtmlTemplate("activationMail", userMap));
 

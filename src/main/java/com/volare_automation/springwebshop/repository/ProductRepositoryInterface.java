@@ -21,7 +21,7 @@ public interface ProductRepositoryInterface {
     public List<CartProduct> deleteCart(String id);
     public List<CartProduct> deleteCartById(Integer id, String idString);
     public CartProduct postCartAll(List<CartProduct> cpl, String id);
-    public void confirmCartOrder(List<CartProduct> cp, String id);
+    public boolean confirmCartOrder(List<CartProduct> cp, String id);
     void createTable(String username);
     boolean updateProducts(double price, Integer quantity, Integer id);
     boolean insertProduct(CartProduct cp);

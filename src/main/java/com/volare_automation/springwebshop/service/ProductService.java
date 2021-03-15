@@ -1,16 +1,22 @@
 package com.volare_automation.springwebshop.service;
 
 import com.volare_automation.springwebshop.model.CartProduct;
+import com.volare_automation.springwebshop.model.Mail;
 import com.volare_automation.springwebshop.model.Products;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductService implements ProductServiceInterface {
@@ -20,6 +26,9 @@ public class ProductService implements ProductServiceInterface {
 
     @Autowired
     UserServiceInterface userServiceInterface;
+
+    @Autowired
+    EmailServiceInterface emailServiceInterface;
 
 
     @Override
@@ -89,6 +98,51 @@ public class ProductService implements ProductServiceInterface {
         if(productRepositoryInterface.insertProduct(cp)){
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean confirmCartSendMail(List<CartProduct> cpList, String id) throws IOException, MessagingException {
+
+
+
+        List<CartProduct> cartList = cpList;
+ //       List<CartProduct> cartListRounded = new ArrayList<>();
+        String nameName = cartList.get(cartList.size()-1).getNameName();
+        String email = cartList.get(cartList.size()-1).getEmail();
+        cartList.remove(cartList.size()-1);
+
+        DecimalFormat twoDecimal = new DecimalFormat("#.00");
+
+//        for(CartProduct c : cartList){
+//            c.setProductPrice(Math.round(c.getProductPrice() * 100.0) / 100.0);
+//            cartListRounded.add(c);
+//        }
+        double total = 0;
+
+        for (int i = 0; i < cpList.size(); i++) {
+            total += (cartList.get(i).getProductPrice()*cartList.get(i).getProductQuantity());
+        }
+
+        double totalRounded = Math.round(total * 100.0) / 100.0;
+
+        double totalForPayment = totalRounded + 125;
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("list", cartList);
+        properties.put("sum", totalForPayment);
+        properties.put("nameName", nameName);
+
+        Mail mail = new Mail();
+        mail.setFrom("noreply@gmail.com");
+        mail.setTo(email);
+        mail.setSubject("hi");
+        mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
+
+        emailServiceInterface.sendMail(mail);
+
+        productRepositoryInterface.confirmCartOrder(cartList, id);
+
         return false;
     }
 }

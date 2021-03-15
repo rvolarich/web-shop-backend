@@ -94,13 +94,13 @@
     <td th:text="${Products.productDescription}">Product name</td>
     </div>
         <div class="divNumbers">
-    <td th:text="${Products.productPrice}">Product name</td>
+    <td th:text="${#numbers.formatDecimal(Products.productPrice, 0, 'COMMA', 2, 'POINT')}">Product name</td>
         </div>
     <div class="divNumbers">
         <td th:text="${Products.productQuantity}">Product name</td>
     </div>
     <div class="divNumbers">
-        <td th:text="${Products.productQuantity * Products.productPrice}">Product name</td>
+        <td th:text="${#numbers.formatDecimal((Products.productQuantity * Products.productPrice), 0, 'COMMA', 2, 'POINT')}">Product name</td>
     </div>
     <br /><hr><br />
 </tr>
@@ -115,7 +115,7 @@
 <br />
 <div style="margin-top: 15px; font-weight: bold">
 <div style="width:16%;float: right;">
-    <td th:text="${sum}"></td>
+    <td th:text="${#numbers.formatDecimal(sum, 0, 'COMMA', 2, 'POINT')}"></td>
 </div>
 <div style="width:14%;float: right;">
     <td>Total for payment:</td>

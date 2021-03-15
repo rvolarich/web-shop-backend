@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.authentication;
 
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.model.User;
 import com.volare_automation.springwebshop.model.UserAuthDataModel;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
@@ -144,7 +145,7 @@ public class UserAuth {
     }
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
-    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException, MessagingException {
+    public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException, MessagingException, DocumentException {
 
         return userServiceInterface.registerUser(request, user);
     }

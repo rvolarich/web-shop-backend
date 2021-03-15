@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.service;
 
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Products;
 
@@ -19,5 +20,5 @@ public interface ProductServiceInterface {
     public List<CartProduct> deleteCartId(CartProduct cp, String idString);
     boolean updateProducts(CartProduct cp);
     boolean insertProduct(CartProduct cp);
-    boolean confirmCartSendMail(List<CartProduct> cpList, String id) throws IOException, MessagingException;
+    boolean confirmCartSendMail(List<CartProduct> cpList, String id) throws IOException, MessagingException, DocumentException;
 }

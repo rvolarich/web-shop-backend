@@ -1,6 +1,7 @@
 package com.volare_automation.springwebshop.service;
 
 //import com.volare_automation.springwebshop.model.CartProductTest;
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Mail;
 import com.volare_automation.springwebshop.model.User;
@@ -225,7 +226,7 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
-    public boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException {
+    public boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException, DocumentException {
 
         if(!userExists(user)){
             return false;

@@ -1,6 +1,7 @@
 package com.volare_automation.springwebshop.service;
 
 //import com.volare_automation.springwebshop.model.CartProductTest;
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.User;
 
@@ -29,7 +30,7 @@ public interface UserServiceInterface {
     Integer getUserIdFromCookie(HttpServletRequest request);
     String getSessionIdFromCookie(HttpServletRequest request);
     String authUser(User user);
-    boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException;
+    boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException, DocumentException;
     String getName(HttpServletRequest request);
    // public void postCartProduct(CartProductTest c);
 }

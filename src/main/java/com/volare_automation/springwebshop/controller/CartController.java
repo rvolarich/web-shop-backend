@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.controller;
 //import com.volare_automation.springwebshop.model.CartProductTest;
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.repository.ProductRepositoryInterface;
 import com.volare_automation.springwebshop.service.ProductServiceInterface;
@@ -126,7 +127,7 @@ public class CartController {
     }
 
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
-    public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp) throws IOException, MessagingException {
+    public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp) throws IOException, MessagingException, DocumentException {
 
 
         

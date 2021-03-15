@@ -1,5 +1,6 @@
 package com.volare_automation.springwebshop.controller;
 
+import com.lowagie.text.DocumentException;
 import com.volare_automation.springwebshop.JavaMailConfig;
 import com.volare_automation.springwebshop.model.CartProduct;
 import com.volare_automation.springwebshop.model.Mail;
@@ -105,7 +106,7 @@ public class UserController {
 
     //@GetMapping("/send")
     public String sendEmail(@RequestBody List<CartProduct> cpList)
-            throws MessagingException, IOException {
+            throws MessagingException, IOException, DocumentException {
 
         List<CartProduct> cartList = cpList;
         String nameName = cartList.get(cartList.size()-1).getNameName();

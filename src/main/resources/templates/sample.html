@@ -13,6 +13,8 @@
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 12px;
+            width: 100%;
+            border: none;
         }
 
         hr{
@@ -22,43 +24,29 @@
 
             background-color: gray;
         }
-
-        .hrHead{
-            border: none;
-            height: 2px;
-            width:100%;
-
-            background-color: gray;
-        }
-        div{
-
+        th {
+            border-bottom: 1px solid black;
+            text-align: left;
         }
 
-        .divItem{
-            border: none;
-            width: 29%;
-            float: left;
-        }
-
-        .divNumbers{
-            border: none;
-            width: 13%;
-            float: left;
-        }
-
-        .tableHead{
-            font-weight: bold;
+        td{
+            padding-top: 10px;
+            padding-bottom: 10px;
 
         }
-        .right {
-            position: absolute;
-            right: 0px;
 
-
-
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
+
+
+
+
+
     </style>
 </head>
+
 <body>
 
 <p th:text="'Hi ' + ${nameName} + ','" ></p>
@@ -68,61 +56,57 @@
 <div style="height: 20px"></div>
 <br />
 <br />
+<table style="width: 100%">
+<tr>
+    <th >Product name</th>
 
-<div class="divItem">
-    <td><span class="tableHead">Product name</span></td>
-</div>
-<div class="divItem">
-    <td><span class="tableHead">Product description</span></td>
-</div>
-<div class="divNumbers">
-    <td><span class="tableHead">Price</span></td>
-</div>
-<div class="divNumbers">
-    <td><span class="tableHead">Quantity</span></td>
-</div>
-<div class="divNumbers">
-    <td><span class="tableHead">Total</span></td>
-</div>
-<br /><hr class="hrHead"><br />
 
-<tr th:each="Products, iterator : ${list}" >
-    <div class="divItem">
-<td th:text="${iterator.index + 1} + '. ' + ${Products.productName}">Product name</td>
-    </div>
-    <div class="divItem">
-    <td th:text="${Products.productDescription}">Product name</td>
-    </div>
-        <div class="divNumbers">
-    <td th:text="${#numbers.formatDecimal(Products.productPrice, 0, 'COMMA', 2, 'POINT')}">Product name</td>
-        </div>
-    <div class="divNumbers">
-        <td th:text="${Products.productQuantity}">Product name</td>
-    </div>
-    <div class="divNumbers">
-        <td th:text="${#numbers.formatDecimal((Products.productQuantity * Products.productPrice), 0, 'COMMA', 2, 'POINT')}">Product name</td>
-    </div>
-    <br /><hr><br />
+    <th>Product description</th>
+
+
+    <th >Price</th>
+
+
+    <th > Quantity</th>
+
+
+    <th >Total</th>
 </tr>
 
+<tr th:each="Products, iterator : ${list}">
 
-<div style="width:16%;float: right;">
-    <td>125.00</td>
-</div>
-<div style="width:14%;float: right;">
-    <td>Shipping:</td>
-</div>
-<br />
-<div style="margin-top: 15px; font-weight: bold">
-<div style="width:16%;float: right;">
-    <td th:text="${#numbers.formatDecimal(sum, 0, 'COMMA', 2, 'POINT')}"></td>
-</div>
-<div style="width:14%;float: right;">
-    <td>Total for payment:</td>
-</div>
-    <br />
-    <hr>
-</div>
+<td th:text="${iterator.index + 1} + '. ' + ${Products.productName}"></td>
+
+
+    <td th:text="${Products.productDescription}"></td>
+
+
+    <td th:text="${#numbers.formatDecimal(Products.productPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+
+
+        <td th:text="${Products.productQuantity}">Product name</td>
+
+
+        <td th:text="${#numbers.formatDecimal((Products.productQuantity * Products.productPrice), 0, 'COMMA', 2, 'POINT')}"></td>
+
+
+</tr>
+
+    <tr>
+        <td colspan="2" style="border-top: solid 1px"></td>
+        <td colspan="2" style="text-align: left; border-top: solid 1px" >Shipping:</td>
+        <td style="text-align: left; border-top: solid 1px">125.00</td>
+    </tr>
+    <tr>
+        <td colspan="2"></td>
+        <td colspan="2" style="text-align: left; font-weight: bold">Total for payment:</td>
+        <td style="font-weight: bold; text-align: left" th:text="${#numbers.formatDecimal(sum, 0, 'COMMA', 2, 'POINT')}"></td>
+    </tr>
+</table>
+
+
+
+
 
 
 </body>

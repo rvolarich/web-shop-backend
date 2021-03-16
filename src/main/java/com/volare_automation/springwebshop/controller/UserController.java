@@ -76,18 +76,15 @@ public class UserController {
         return "Error updating user!";
     }
 
-    @RequestMapping(value = "/user/del", method = RequestMethod.GET)
-    public boolean deleteUser(HttpServletRequest request){
-
-//        if(request.getCookies().length == 0){
+//    @RequestMapping(value = "/user/del", method = RequestMethod.GET)
+//    public boolean deleteUser(HttpServletRequest request){
 //
+//
+//        if(userServiceInterface.deleteUser(request)){
+//            return true;
 //        }
-
-        if(userServiceInterface.deleteUser(request)){
-            return true;
-        }
-        return false;
-    }
+//        return false;
+//    }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
     public List <CartProduct> deleteUser(){

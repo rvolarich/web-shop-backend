@@ -13,6 +13,7 @@ public class User {
     private String zip;
     private String city;
     private String country;
+    boolean stayLogged;
 
 
 //    public User(int userid, String username, String password,
@@ -139,6 +140,14 @@ public class User {
 
     public void setIsEnabled(String isEnabled) {
         this.isEnabled = isEnabled;
+    }
+
+    public boolean isStayLogged() {
+        return stayLogged;
+    }
+
+    public void setStayLogged(boolean stayLogged) {
+        this.stayLogged = stayLogged;
     }
 
     //    public String getEmail() {

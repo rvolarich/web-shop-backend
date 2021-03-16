@@ -110,8 +110,10 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public boolean deleteUserById(int id) {
         String sql = "DELETE FROM users WHERE userid = ?";
+        String deleteTable = String.format("DROP TABLE IF EXISTS t_%s", String.valueOf(id));
         Object [] userObject = new Object[]{id};
         System.out.println("user id" + id);
+        jdbcTemplate.execute(deleteTable);
         int del = jdbcTemplate.update(sql, userObject);
         if(del > 0){
             return true;

@@ -6,6 +6,7 @@ public class UserAuthDataModel {
     private String loginStatus;
     private String nameName;
     private boolean isLogged;
+    private boolean sessionExpired;
 
 
     public UserAuthDataModel() {
@@ -42,5 +43,13 @@ public class UserAuthDataModel {
 
     public void setNameName(String nameName) {
         this.nameName = nameName;
+    }
+
+    public boolean isSessionExpired() {
+        return sessionExpired;
+    }
+
+    public void setSessionExpired(boolean sessionExpired) {
+        this.sessionExpired = sessionExpired;
     }
 }

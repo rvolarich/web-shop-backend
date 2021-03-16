@@ -32,5 +32,6 @@ public interface UserServiceInterface {
     String authUser(User user);
     boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException, DocumentException;
     String getName(HttpServletRequest request);
+    Integer getExpValueFromCookie(HttpServletRequest request);
    // public void postCartProduct(CartProductTest c);
 }

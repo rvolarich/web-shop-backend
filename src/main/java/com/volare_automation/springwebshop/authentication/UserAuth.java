@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true",
@@ -23,8 +25,7 @@ import java.io.*;
 
 public class UserAuth {
 
-    private boolean stayLogged;
-    private boolean userLogged;
+
     UserServiceInterface userServiceInterface;
 
     @Autowired
@@ -48,38 +49,44 @@ public class UserAuth {
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
     public UserAuthDataModel loggedIn(HttpServletRequest request,
-                                      HttpServletResponse response) {
+                                      HttpServletResponse response, @RequestParam Boolean sessionExpired) {
 
 
 
-        System.out.println("logged: " + stayLogged);
+
         UserAuthDataModel userAuthDataModel = new UserAuthDataModel();
         userAuthDataModel.setLogged(false);
 
-        if(userLogged){
+
             Cookie [] cookies = request.getCookies();
             for(Cookie cookie : cookies){
-                if(cookie.getName().equals("SessionId")){
-                    userAuthDataModel.setSessionExpired(false);
-                }else{
+                if(cookie.getName().equals("UserId")){
                     userAuthDataModel.setSessionExpired(true);
+                    for(Cookie c : cookies){
+                        if(c.getName().equals("SessionId")){
+                            userAuthDataModel.setSessionExpired(false);
+                        }
+                    }
+
+                }else{
+                    userAuthDataModel.setSessionExpired(false);
                 }
             }
+
+        if(userAuthDataModel.isSessionExpired()){
+            response.addHeader("Set-Cookie", "SessionId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+            response.addHeader("Set-Cookie", "UserId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+            response.addHeader("Set-Cookie", "ExpValue=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
         }
+
         //userAuthDataModel.setStayLogged(stayLogged);
         if(userServiceInterface.testUserLogged(request)){
 
             userAuthDataModel.setNameName(userServiceInterface.getName(request));
             userAuthDataModel.setLogged(true);
-            int maxAge;
-            if(stayLogged){
-                maxAge = 600;
-            }
-            else{
-                maxAge = 180;
-            }
-            System.out.println("staylogged u logged_in: " + stayLogged);
-            System.out.println("userLogged u logged_in: " + userLogged);
+            int maxAge = userServiceInterface.getExpValueFromCookie(request);
+            System.out.println("staylogged u logged_in: ");
+            System.out.println("userLogged u logged_in: ");
             String sessionId = userServiceInterface.getSessionIdFromCookie(request);
 
                 response.addHeader("Set-Cookie",
@@ -103,21 +110,22 @@ public class UserAuth {
 
         if(userAuthData.equals("authenticated")){
 
-            userLogged = true;
+
             String sessionId = userServiceInterface.generateSessionId();
             userRepositoryInterface.saveSessionId(user, sessionId);
+
             int maxAge;
             if(user.isStayLogged()){
-               maxAge = 600;
-               stayLogged = true;
+               maxAge = 1800;
+               response.addHeader("Set-Cookie",
+                       String.format("ExpValue=%s; HttpOnly; SameSite=Lax; Path=/;", maxAge));
             }
             else{
-                maxAge = 180;
-                stayLogged = false;
+                maxAge = 300;
+                response.addHeader("Set-Cookie",
+                        String.format("ExpValue=%s; HttpOnly; SameSite=Lax; Path=/;", maxAge));
             }
-            System.out.println("stayLogged u login: " + stayLogged);
-            System.out.println("userLogged u login: " + userLogged);
-            System.out.println("maxAge: " + maxAge);
+
             response.addHeader("Set-Cookie",
                     String.format("%s=%s; %s; %s; %s; %s=%s",
                             "SessionId", sessionId,
@@ -182,22 +190,15 @@ public class UserAuth {
 //    }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public boolean logoutUser(HttpServletRequest request){
+    public boolean logoutUser(HttpServletRequest request, HttpServletResponse response){
 
-        stayLogged = false;
-        userLogged = false;
+        response.addHeader("Set-Cookie", "SessionId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+        response.addHeader("Set-Cookie", "UserId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+        response.addHeader("Set-Cookie", "ExpValue=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
         userServiceInterface.logoutUser(request);
             return false;
     }
 
-    @RequestMapping(value = "/reset", method = RequestMethod.GET)
-    public void resetUserLoginStatusVariables(){
-
-        stayLogged = false;
-        userLogged = false;
-        System.out.println("bio u reset");
-
-    }
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public boolean register(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException, MessagingException, DocumentException {
@@ -220,10 +221,12 @@ public class UserAuth {
     }
 
     @RequestMapping(value = "/user/del", method = RequestMethod.GET)
-    public boolean deleteUser(HttpServletRequest request){
+    public boolean deleteUser(HttpServletRequest request, HttpServletResponse response){
 
-        stayLogged = false;
-        userLogged = false;
+        response.addHeader("Set-Cookie", "SessionId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+        response.addHeader("Set-Cookie", "UserId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+        response.addHeader("Set-Cookie", "ExpValue=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
+
 
         if(userServiceInterface.deleteUser(request)){
             return true;

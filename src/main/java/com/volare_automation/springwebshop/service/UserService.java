@@ -164,6 +164,21 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public Integer getExpValueFromCookie(HttpServletRequest request) {
+
+        Integer expValue = 0;
+        Cookie [] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals("ExpValue")) {
+                    expValue = Integer.parseInt(c.getValue());
+                }
+            }
+        }
+        return expValue;
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepositoryInterface.getAllUsers();
     }

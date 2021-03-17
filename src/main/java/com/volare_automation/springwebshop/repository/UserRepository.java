@@ -222,12 +222,38 @@ public class UserRepository implements UserRepositoryInterface{
         return false;
     }
 
+//    @Override
+//    public Map<String, Object> getPasswordAndEnabledByUsername(User user) {
+//
+//        boolean allowMap = false;
+//        Map<String, Object> passwordEnabledMap = new HashMap<>();
+//        String sql = "SELECT password, enabled FROM users WHERE username=?";
+//        String query = "SELECT username FROM users";
+//
+//        List<String> usernameList = jdbcTemplate.queryForList(query, String.class);
+//        for(int i = 0; i < usernameList.size(); i++){
+//            if(usernameList.get(i).equals(user.getUsername())){
+//                allowMap = true;
+//            }
+//        }
+//        if(allowMap) {
+//            passwordEnabledMap = jdbcTemplate.queryForMap
+//                    (sql, new Object[]{user.getUsername()});
+//        }
+//        else{
+//            passwordEnabledMap.put("password","");
+//            passwordEnabledMap.put("enabled","");
+//        }
+//
+//        return passwordEnabledMap;
+//    }
+
     @Override
-    public Map<String, Object> getPasswordAndEnabledByUsername(User user) {
+    public Map<String, Object> getPasswordEnabledRoleByUsername(User user) {
 
         boolean allowMap = false;
-        Map<String, Object> passwordEnabledMap = new HashMap<String, Object>();
-        String sql = "SELECT password, enabled FROM users WHERE username=?";
+        Map<String, Object> passwordEnabledMap = new HashMap<>();
+        String sql = "SELECT password, enabled, role FROM users WHERE username=?";
         String query = "SELECT username FROM users";
 
         List<String> usernameList = jdbcTemplate.queryForList(query, String.class);
@@ -243,6 +269,7 @@ public class UserRepository implements UserRepositoryInterface{
         else{
             passwordEnabledMap.put("password","");
             passwordEnabledMap.put("enabled","");
+            passwordEnabledMap.put("role","");
         }
 //        for(Map.Entry m:passwordEnabledMap.entrySet()){
 //            System.out.println(m.getKey()+" "+m.getValue());
@@ -260,8 +287,8 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public Map<String, Object> testUserLogged(Integer userId) {
         boolean allowTest = false;
-        String sql = "SELECT enabled, sessionid FROM users WHERE userid=?";
-        Map<String, Object> result = new HashMap<String, Object>();
+        String sql = "SELECT role, enabled, sessionid FROM users WHERE userid=?";
+        Map<String, Object> result = new HashMap<>();
         for(int i = 0; i < listOfUserIds().size(); i++){
             if(listOfUserIds().get(i) == userId){
                 allowTest = true;

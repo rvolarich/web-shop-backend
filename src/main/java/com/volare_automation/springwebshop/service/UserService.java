@@ -73,9 +73,10 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
-    public boolean testUserLogged(HttpServletRequest request) {
+    public String testUserLogged(HttpServletRequest request) {
         String databaseSessionId = "";
         String isEnabled = "";
+        String databaseRole = "";
 //        Cookie[] cookies = request.getCookies();
 //        for(Cookie cookie : cookies){
 //            if(cookie.getName().equals("UserId")) userId = Integer.parseInt(cookie.getValue());
@@ -88,13 +89,21 @@ public class UserService implements UserServiceInterface{
             else if(m.getKey().equals("enabled")){
                 isEnabled = (String) m.getValue();
             }
+            else {
+                databaseRole = (String) m.getValue();
+            }
         }
 
-       if(getSessionIdFromCookie(request).equals(databaseSessionId) && isEnabled.equals("true")){
-           return true;
+       if(getSessionIdFromCookie(request).equals(databaseSessionId) && isEnabled.equals("true") &&
+        databaseRole.equals("ROLE_USER")){
+           return "userAuthenticated";
        }
+       else if(getSessionIdFromCookie(request).equals(databaseSessionId) && isEnabled.equals("true") &&
+        databaseRole.equals("ROLE_ADMIN")){
+            return "adminAuthenticated";
+        }
 
-        return false;
+        return "false";
     }
 
     @Override
@@ -219,22 +228,37 @@ public class UserService implements UserServiceInterface{
         System.out.println("user password " + user.getPassword());
         String databasePassword = "";
         String databaseEnabled = "";
-        for(Map.Entry m:userRepositoryInterface.getPasswordAndEnabledByUsername(user).entrySet()){
+        String databaseRole = "";
+
+        for(Map.Entry m:userRepositoryInterface.getPasswordEnabledRoleByUsername(user).entrySet()){
             if(m.getKey().equals("password")){
                 databasePassword = (String) m.getValue();
             }
             else if(m.getKey().equals("enabled")){
                 databaseEnabled = (String) m.getValue();
             }
+            else if(m.getKey().equals("role")){
+                databaseRole = (String) m.getValue();
+            }
         }
 
+        System.out.println("enabled" + databaseEnabled);
+        System.out.println("role" + databaseRole);
 
-
-        if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("true")){
-            return "authenticated";
+        if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("true")
+            && databaseRole.equals("ROLE_USER")){
+            return "userAuthenticated";
         }
-        else if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("false"))
-        return "disabled";
+
+        else if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("true")
+                && databaseRole.equals("ROLE_ADMIN")){
+            return "adminAuthenticated";
+        }
+
+        else if(passwordEncoder.matches(user.getPassword(), databasePassword) && databaseEnabled.equals("false")) {
+            return "disabled";
+        }
+
 
         else return "wrongUsernameOrPassword";
 

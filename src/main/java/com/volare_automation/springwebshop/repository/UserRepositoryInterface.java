@@ -20,7 +20,7 @@ public interface UserRepositoryInterface {
     public void saveSessionId(User user, String sessionId);
     public String getUserId(User user);
     String getUserNameById(Integer id);
-    Map<String, Object> getPasswordAndEnabledByUsername(User user);
+    Map<String, Object> getPasswordEnabledRoleByUsername(User user);
     int logoutUser(Integer userId);
     Map<String, Object> testUserLogged(Integer userId);
     List<String> listOfUsernames();

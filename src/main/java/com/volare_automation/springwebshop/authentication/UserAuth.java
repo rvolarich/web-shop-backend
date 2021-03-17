@@ -79,9 +79,16 @@ public class UserAuth {
             response.addHeader("Set-Cookie", "ExpValue=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");
         }
 
-        //userAuthDataModel.setStayLogged(stayLogged);
-        if(userServiceInterface.testUserLogged(request)){
+        String userAuthData = userServiceInterface.testUserLogged(request);
 
+        if(userAuthData.equals("userAuthenticated") || userAuthData.equals("adminAuthenticated")){
+
+            if(userAuthData.equals("adminAuthenticated")){
+                userAuthDataModel.setAdminLogged(true);
+            }
+            else{
+                userAuthDataModel.setAdminLogged(false);
+            }
             userAuthDataModel.setNameName(userServiceInterface.getName(request));
             userAuthDataModel.setLogged(true);
             int maxAge = userServiceInterface.getExpValueFromCookie(request);
@@ -108,7 +115,7 @@ public class UserAuth {
         String userAuthData = userServiceInterface.authUser(user);
         System.out.println("bio u login");
 
-        if(userAuthData.equals("authenticated")){
+        if(userAuthData.equals("userAuthenticated") || userAuthData.equals("adminAuthenticated")){
 
 
             String sessionId = userServiceInterface.generateSessionId();
@@ -135,6 +142,12 @@ public class UserAuth {
                             "HttpOnly;", "SameSite=Lax", "Path=/"));
 
             userAuthDataModel.setLogged(true);
+            if(userAuthData.equals("adminAuthenticated")){
+                userAuthDataModel.setAdminLogged(true);
+            }
+            else{
+                userAuthDataModel.setAdminLogged(false);
+            }
             userAuthDataModel.setLoginStatus("");
 
             productRepositoryInterface.createTable(userRepositoryInterface.getUserId(user));

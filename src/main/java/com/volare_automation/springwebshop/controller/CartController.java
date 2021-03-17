@@ -132,7 +132,9 @@ public class CartController {
 
         
         if(request.getCookies() != null) {
-            if (userServiceInterface.testUserLogged(request)) {
+
+            String userAuthData = userServiceInterface.testUserLogged(request);
+            if (userAuthData.equals("userAuthenticated") || userAuthData.equals("adminAuthenticated")) {
                 String id = userServiceInterface.getUserIdFromCookie(request).toString();
                 System.out.println("id confirm order: " + id);
                 productServiceInterface.confirmCartSendMail(cp, id);

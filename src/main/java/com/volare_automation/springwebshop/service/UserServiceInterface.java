@@ -21,7 +21,7 @@ public interface UserServiceInterface {
     public List<CartProduct> getList();
     void printUser(User u);
     boolean logoutUser(HttpServletRequest request);
-    boolean testUserLogged(HttpServletRequest request);
+    String testUserLogged(HttpServletRequest request);
     String getUserId(User user);
    // Integer parseUserId(HttpServletRequest request);
     String generateSessionId();

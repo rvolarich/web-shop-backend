@@ -6,6 +6,7 @@ public class UserAuthDataModel {
     private String loginStatus;
     private String nameName;
     private boolean isLogged;
+    private boolean adminLogged;
     private boolean sessionExpired;
 
 
@@ -51,5 +52,13 @@ public class UserAuthDataModel {
 
     public void setSessionExpired(boolean sessionExpired) {
         this.sessionExpired = sessionExpired;
+    }
+
+    public boolean isAdminLogged() {
+        return adminLogged;
+    }
+
+    public void setAdminLogged(boolean adminLogged) {
+        this.adminLogged = adminLogged;
     }
 }

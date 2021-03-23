@@ -58,6 +58,7 @@ public class ProductController {
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public List<Products> getProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException {
        List<Products> productList = new ArrayList<>();
+        System.out.println("bio u products");
 //        Cookie[] cookies = request.getCookies();
 //        for (int i = 0; i < cookies.length; i++) {
 //            String name = cookies[i].getName();

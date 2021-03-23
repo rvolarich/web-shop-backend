@@ -58,20 +58,23 @@ public class UserAuth {
         userAuthDataModel.setLogged(false);
 
 
-            Cookie [] cookies = request.getCookies();
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("UserId")){
+        Cookie [] cookies = request.getCookies();
+
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("UserId")) {
                     userAuthDataModel.setSessionExpired(true);
-                    for(Cookie c : cookies){
-                        if(c.getName().equals("SessionId")){
+                    for (Cookie c : cookies) {
+                        if (c.getName().equals("SessionId")) {
                             userAuthDataModel.setSessionExpired(false);
                         }
                     }
 
-                }else{
+                } else {
                     userAuthDataModel.setSessionExpired(false);
                 }
             }
+        }
 
         if(userAuthDataModel.isSessionExpired()){
             response.addHeader("Set-Cookie", "SessionId=0; HttpOnly; SameSite=Lax; Path=/; Max-Age=0;");

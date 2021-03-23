@@ -125,10 +125,17 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public boolean regUser(User user, String activationToken) {
 
+        String role;
+        if(user.isAdminAuth()){
+            role = "ROLE_ADMIN";
+        }else{
+            role = "ROLE_USER";
+        }
+
         String sql = "INSERT INTO users (username, password, role, enabled, name, surname, activationtoken) " +
                 "VALUES (?,?,?,?,?,?,?)";
         int i = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(),
-                "ROLE_USER", "false", user.getNameName(), user.getSurname(), activationToken);
+                role, "false", user.getNameName(), user.getSurname(), activationToken);
         if(i == 1){
             System.out.println("User registered");
             return true;

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", methods = {RequestMethod.POST, RequestMethod.GET},
+@CrossOrigin(methods = {RequestMethod.POST, RequestMethod.GET},
         allowCredentials = "true")
 public class CartController {
 

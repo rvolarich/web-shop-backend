@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true",
+@CrossOrigin(allowCredentials = "true",
             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 
 public class UserController {

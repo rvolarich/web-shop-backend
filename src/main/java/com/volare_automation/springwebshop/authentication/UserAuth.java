@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowCredentials = "true",
+@CrossOrigin(allowCredentials = "true",
                 methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                         RequestMethod.OPTIONS, RequestMethod.DELETE})
 

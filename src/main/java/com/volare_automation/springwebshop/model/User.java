@@ -14,6 +14,7 @@ public class User {
     private String city;
     private String country;
     boolean stayLogged;
+    boolean adminAuth;
 
 
 //    public User(int userid, String username, String password,
@@ -148,6 +149,14 @@ public class User {
 
     public void setStayLogged(boolean stayLogged) {
         this.stayLogged = stayLogged;
+    }
+
+    public boolean isAdminAuth() {
+        return adminAuth;
+    }
+
+    public void setAdminAuth(boolean adminAuth) {
+        this.adminAuth = adminAuth;
     }
 
     //    public String getEmail() {

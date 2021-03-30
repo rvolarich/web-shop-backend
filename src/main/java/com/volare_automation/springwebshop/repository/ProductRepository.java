@@ -39,11 +39,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     FileInputStream fileInputStream = null;
 
 
-//    public Connection getConnection() throws SQLException {
-//        conn = DriverManager
-//                .getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-//        return conn;
-//    }
+
 
 
 
@@ -51,25 +47,10 @@ public class ProductRepository implements ProductRepositoryInterface {
     private void postConstruct() throws IOException, SQLException {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
-        System.out.println("Iv been in post construct");
+
     }
 
-//    public InputStream inputStream () throws SQLException {
-//        conn = DriverManager
-//                .getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-//        PreparedStatement ps = conn.prepareStatement("SELECT data FROM images WHERE name=?");
-//        ps.setString(1, "fcu.jpg");
-//        ResultSet rs = ps.executeQuery();
-//        if (rs != null) {
-//            while(rs.next()) {
-//                imgBytes = rs.getBytes(1);
-//                is = rs.getBinaryStream(2);
-//            }
-//            rs.close();
-//        }
-//        ps.close();
-//        return is;
-//    }
+
 
     @Override
     public List<Products> getAllProducts (){

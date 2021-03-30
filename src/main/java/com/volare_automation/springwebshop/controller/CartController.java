@@ -29,17 +29,14 @@ public class CartController {
     UserServiceInterface userServiceInterface;
 
 
-//    @RequestMapping(value = "/pcpr", method = RequestMethod.POST)
-//    public void postCartProductReturn(@RequestBody CartProduct cp){
-//        productRepositoryInterface.postCartProduct(cp);
-//    }
+
 
     @RequestMapping(value = "/pcp", method = RequestMethod.POST)
     public void postCartProduct(HttpServletRequest request, @RequestBody CartProduct cp){
 
         Cookie[] cookies = request.getCookies();
         if(cookies == null) {
-            System.out.println("no cookies");
+
         }
         productServiceInterface.postCartProduct(request, cp);
 
@@ -56,21 +53,7 @@ public class CartController {
         cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty(id));
         return cartUpdate;
     }
-    // returns only boolean and total cart quantity
-//    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
-//    public CartProduct postAllCartProducts(@RequestBody List<CartProduct> cp, CartProduct cartUpdate){
-//        productRepositoryInterface.postCartAll(cp);
-//        cartUpdate.setCartUpdated(true);
-//        cartUpdate.setTotalCartQty(productRepositoryInterface.getTableQty());
-//        return cartUpdate;
-//    }
 
-//    @RequestMapping(value = "/postcartall", method = RequestMethod.POST)
-//    public void postAllCartProducts(@RequestBody List<CartProduct> cp){
-//        productRepositoryInterface.postCartAll(cp);
-//
-//
-//    }
     @RequestMapping(value = "/post/cart/local", method = RequestMethod.POST)
     public void postCartLocal(HttpServletRequest request, @RequestBody List<CartProduct> cpList){
 
@@ -136,19 +119,14 @@ public class CartController {
             String userAuthData = userServiceInterface.testUserLogged(request);
             if (userAuthData.equals("userAuthenticated") || userAuthData.equals("adminAuthenticated")) {
                 String id = userServiceInterface.getUserIdFromCookie(request).toString();
-                System.out.println("id confirm order: " + id);
+
                 productServiceInterface.confirmCartSendMail(cp, id);
             }
             else{
                 productServiceInterface.confirmCartSendMail(cp, "guest");
-                System.out.println(("update cart return: " + productServiceInterface.confirmCartSendMail(cp, "guest")));
-                System.out.println("bio u guest!");
             }
         }
-//        else{
-//            productServiceInterface.confirmCartSendMail(cp, "guest");
-//            System.out.println("bio u guest coockies null!");
-//        }
+
     }
 
 }

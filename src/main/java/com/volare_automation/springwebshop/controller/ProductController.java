@@ -59,16 +59,9 @@ public class ProductController {
     public List<Products> getProducts(HttpServletRequest request, HttpServletResponse response) throws SQLException {
        List<Products> productList = new ArrayList<>();
         System.out.println("bio u products");
-//        Cookie[] cookies = request.getCookies();
-//        for (int i = 0; i < cookies.length; i++) {
-//            String name = cookies[i].getName();
-//            String value = cookies[i].getValue();
-//            if(cookies[i].getName().equals("$1&sessid")){
-//                System.out.println("sessionCookie= " + value);
-//            }
-//        }
-        /*if(userServiceInterface.testUserLogged(request))*/ return productServiceInterface.getAllProducts();
-        //else return productList;
+
+        return productServiceInterface.getAllProducts();
+
 
     }
 

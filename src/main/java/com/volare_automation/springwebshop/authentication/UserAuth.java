@@ -39,13 +39,13 @@ public class UserAuth {
         this.userServiceInterface = userServiceInterface;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public void getSession(HttpServletRequest request, HttpServletResponse response){
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(60);
-        session.setAttribute(session.getId(), "");
-       // userRepositoryInterface.saveCartproductToSession(session.getId());
-    }
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public void getSession(HttpServletRequest request, HttpServletResponse response){
+//        HttpSession session = request.getSession();
+//        session.setMaxInactiveInterval(60);
+//        session.setAttribute(session.getId(), "");
+//       // userRepositoryInterface.saveCartproductToSession(session.getId());
+//    }
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
     public UserAuthDataModel loggedIn(HttpServletRequest request,
@@ -232,6 +232,7 @@ public class UserAuth {
                 String.format("%s=%s; %s; %s; %s;",
                         "SessionId", "welcome",
                         "HttpOnly;", "SameSite=Lax", "Path=/"));
+        System.out.println("token u activate: " + token);
         userRepositoryInterface.activateUser(token);
         return true;
     }

@@ -26,10 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(allowCredentials = "true",
@@ -48,6 +45,19 @@ public class UserController {
 
     @Autowired
     private ProductRepositoryInterface productRepositoryInterface;
+
+    @GetMapping(value = "/time")
+    public String getTime(){
+        return String.format("Now is  %s", new Date());
+    }
+
+
+    @GetMapping(value = "/data")
+    public boolean getData(){
+        return true;
+    }
+
+
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> getUsers(){
@@ -76,15 +86,6 @@ public class UserController {
         return "Error updating user!";
     }
 
-//    @RequestMapping(value = "/user/del", method = RequestMethod.GET)
-//    public boolean deleteUser(HttpServletRequest request){
-//
-//
-//        if(userServiceInterface.deleteUser(request)){
-//            return true;
-//        }
-//        return false;
-//    }
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
     public List <CartProduct> deleteUser(){
@@ -101,7 +102,7 @@ public class UserController {
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
 
-    //@GetMapping("/send")
+
     public String sendEmail(@RequestBody List<CartProduct> cpList)
             throws MessagingException, IOException, DocumentException {
 
@@ -119,21 +120,12 @@ public class UserController {
         }
 
         double totalForPayment = total + 125;
-//        System.out.println("total " + total);
-//        list.add("Mila");
-//        list.add("Andi");
-//        list.add("mama");
-//        list.add("tata");
-//
-//        model.addAttribute("listUsers", list);
-    //System.out.println("usernames " + user.getUsername());
+
         Map<String, Object> properties = new HashMap<>();
         properties.put("list", cartList);
         properties.put("sum", totalForPayment);
         properties.put("nameName", nameName);
-//        properties.put("location", "Sri Lanka");
-//        properties.put("sign", "Java Developer");
-//
+
         Mail mail = new Mail();
         mail.setFrom("noreply@gmail.com");
         mail.setTo(email);

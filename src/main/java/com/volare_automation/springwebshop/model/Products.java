@@ -23,7 +23,7 @@ public class Products {
         this.productQuantity = product_quantity;
         this.productPrice = product_price;
         this.productImage = product_image;
-        System.out.println("bio u konstruktoru");
+
     }
 
     public double round(double value, int places) {

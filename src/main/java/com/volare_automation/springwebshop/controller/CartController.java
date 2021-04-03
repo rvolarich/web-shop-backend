@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -113,18 +114,38 @@ public class CartController {
     public void confirmOrder(HttpServletRequest request, @RequestBody List<CartProduct> cp) throws IOException, MessagingException, DocumentException {
 
 
-        
+        System.out.println("nameName: " + cp.get(cp.size() - 1).getNameName());
+        System.out.println("email: " + cp.get(cp.size() - 1).getEmail());
+        System.out.println("conf list size: " + cp.size()) ;
+        //
+//        List<CartProduct> cartList = new ArrayList<>();
+//
+//        for(int i = 0; i < cp.size(); i++){
+//            cartList.add(cp.get(i));
+//        }
+//        System.out.println("cart list size: " + cartList.size());
+//
+//        String nameName = cartList.get(cartList.size()-1).getNameName();
+//        String email = cartList.get(cartList.size()-1).getEmail();
+//        System.out.println("Email adresa: " + email);
+//        cartList.remove(cartList.size()-1);
+//
+//        System.out.println("cart list size after remove: " + cartList.size());
+//        productRepositoryInterface.confirmCartOrder(cartList, "guest");
+        //
         if(request.getCookies() != null) {
 
             String userAuthData = userServiceInterface.testUserLogged(request);
             if (userAuthData.equals("userAuthenticated") || userAuthData.equals("adminAuthenticated")) {
                 String id = userServiceInterface.getUserIdFromCookie(request).toString();
-
+                System.out.println("bio u produuuuuuuuuuuuuuuuuuuuuuuct");
                 productServiceInterface.confirmCartSendMail(cp, id);
-            }
-            else{
+            }else{
                 productServiceInterface.confirmCartSendMail(cp, "guest");
             }
+
+        }else{
+            productServiceInterface.confirmCartSendMail(cp, "guest");
         }
 
     }

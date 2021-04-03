@@ -70,7 +70,7 @@
     <th > Quantity</th>
 
 
-    <th >Total</th>
+    <th >Total (in millions)</th>
 </tr>
 
 <tr th:each="Products, iterator : ${list}">
@@ -97,7 +97,7 @@
         <td colspan="2" style="text-align: left; border-top: solid 1px" >Shipping:</td>
         <td style="text-align: left; border-top: solid 1px">125.00</td>
     </tr>
-    <tr>
+    <tr style="border-bottom: 1px solid black">
         <td colspan="2"></td>
         <td colspan="2" style="text-align: left; font-weight: bold">Total for payment:</td>
         <td style="font-weight: bold; text-align: left" th:text="${#numbers.formatDecimal(sum, 0, 'COMMA', 2, 'POINT')}"></td>
@@ -106,6 +106,9 @@
 
 
 
+<p>After your payment you will hear from us no more!</p>
+<br />
+<p><span style="font-weight: bold">OneStop-ShipShop </span>team</p>
 
 
 

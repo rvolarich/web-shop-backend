@@ -11,7 +11,7 @@
   </parent>  
   <groupId>com.volare_automation</groupId>  
   <artifactId>spring-web-shop</artifactId>  
-  <version>0.0.71-SNAPSHOT</version>
+  <version>0.0.86-SNAPSHOT</version>
   <name>spring-web-shop</name>  
   <description>Demo project for Spring</description>  
   <properties> 

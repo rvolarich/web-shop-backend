@@ -262,9 +262,12 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     @Override
     public boolean confirmCartOrder(List<CartProduct> cp, String id) {
-
+        System.out.println("bio u confirmCartProduct");
         Integer confirmUpdate = 0;
         List<Integer> updateList = new ArrayList();
+        for(int i = 0; i < cp.size(); i++){
+            System.out.println("Product list to erase: " + cp.get(i));
+        }
         //try {
             boolean allowUpdate = true;
 
@@ -285,14 +288,15 @@ public class ProductRepository implements ProductRepositoryInterface {
                         System.out.println("bio u delete user caert");
                     }
                     int prodQty = stock - cp.get(i).getProductQuantity();
-                    confirmUpdate = jdbcTemplate.update(sql, prodQty, cp.get(i).getProductId());
+                    jdbcTemplate.update(sql, prodQty, cp.get(i).getProductId());
                     allowUpdate = true;
-                    updateList.add(confirmUpdate);
-                    System.out.println("update list: " + updateList);
+                   // updateList.add(confirmUpdate);
+                    //System.out.println("update list: " + updateList);
+                    System.out.println("bio u guest set stock");
                 }
 
             }
-            System.out.println("fgdd list: " + updateList);
+           // System.out.println("fgdd list: " + updateList);
 
             return true;
 //        }catch (Exception e){

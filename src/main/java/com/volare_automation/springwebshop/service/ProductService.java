@@ -107,14 +107,27 @@ public class ProductService implements ProductServiceInterface {
 
 
 
-        List<CartProduct> cartList = cpList;
- //       List<CartProduct> cartListRounded = new ArrayList<>();
+        List<CartProduct> cartList = new ArrayList<>();
+
+        for(int i = 0; i < cpList.size(); i++){
+            cartList.add(cpList.get(i));
+        }
+        System.out.println("cart list size: " + cartList.size());
+
         String nameName = cartList.get(cartList.size()-1).getNameName();
         String email = cartList.get(cartList.size()-1).getEmail();
         System.out.println("Email adresa: " + email);
         cartList.remove(cartList.size()-1);
 
-        DecimalFormat twoDecimal = new DecimalFormat("#.00");
+        System.out.println("cart list size after remove: " + cartList.size());
+
+        for(int i = 0; i < cartList.size(); i++){
+            System.out.println("Product list to erase: " + cartList.get(i));
+        }
+        productRepositoryInterface.confirmCartOrder(cartList, id);
+
+
+      //  DecimalFormat twoDecimal = new DecimalFormat("#.00");
 
 //        for(CartProduct c : cartList){
 //            c.setProductPrice(Math.round(c.getProductPrice() * 100.0) / 100.0);
@@ -122,7 +135,7 @@ public class ProductService implements ProductServiceInterface {
 //        }
         double total = 0;
 
-        for (int i = 0; i < cpList.size(); i++) {
+        for (int i = 0; i < cartList.size(); i++) {
             total += (cartList.get(i).getProductPrice()*cartList.get(i).getProductQuantity());
         }
 
@@ -143,8 +156,8 @@ public class ProductService implements ProductServiceInterface {
         System.out.println("Email adresa nakon: " + mail.getTo());
         emailServiceInterface.sendMail(mail);
 
-        productRepositoryInterface.confirmCartOrder(cartList, id);
 
-        return false;
+
+        return true;
     }
 }

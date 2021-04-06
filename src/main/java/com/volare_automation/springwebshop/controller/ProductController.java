@@ -74,11 +74,30 @@ public class ProductController {
         return "Error updating product!";
     }
 
+    @RequestMapping(value = "/products/update/all", method = RequestMethod.POST)
+    public String updateProductsAll(@RequestBody double [] qtyPrice ){
+        System.out.println("Products update all:");
+//        for(int i = 0; i < qtyPrice.length; i++){
+//            for(int k = 0; k < qtyPrice[i].length; k++){
+//                System.out.println("qtyPrice data: " + qtyPrice[i][k]);
+//            }
+//        }
+
+//        if(productServiceInterface.updateProducts(cp)){
+//            return "Product successfully updated!";
+//        }
+        return "Error updating product!";
+    }
+
     @RequestMapping(value = "/products/insert", method = RequestMethod.POST)
     public String insertProducts(@RequestBody CartProduct cp){
 
-        if(productServiceInterface.insertProduct(cp)){
+        int i = productServiceInterface.insertProduct(cp);
+        if(i == 1){
             return "Product added successfully!";
+        }
+        else if(i == 2){
+            return "Product already exists!";
         }
 
 

@@ -19,6 +19,6 @@ public interface ProductServiceInterface {
     public List<Integer> getProductId();
     public List<CartProduct> deleteCartId(CartProduct cp, String idString);
     boolean updateProducts(CartProduct cp);
-    boolean insertProduct(CartProduct cp);
+    Integer insertProduct(CartProduct cp);
     boolean confirmCartSendMail(List<CartProduct> cpList, String id) throws IOException, MessagingException, DocumentException;
 }

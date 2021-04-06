@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,14 +91,18 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Override
-    public boolean insertProduct(CartProduct cp) {
+    public Integer insertProduct(CartProduct cp) {
 
         double doublePriceRounded = formatPrice(cp.getProductPriceString());
         cp.setProductPrice(doublePriceRounded);
-        if(productRepositoryInterface.insertProduct(cp)){
-            return true;
+        int i = productRepositoryInterface.insertProduct(cp);
+        if(i == 2){
+            return 2;
         }
-        return false;
+        else if(i == 1){
+            return 1;
+        }
+        return 0;
     }
 
     @Override

@@ -330,17 +330,26 @@ public class ProductRepository implements ProductRepositoryInterface {
     }
 
     @Override
-    public boolean insertProduct(CartProduct cp) {
+    public Integer insertProduct(CartProduct cp) {
 
         String sql = "INSERT INTO products (productname, productdescription," +
                 "productquantity, productprice, productimage) VALUES (?,?,?,?,?)";
 
+        String productNameList = "SELECT productname FROM products";
+        List<String> cpList = jdbcTemplate.queryForList(productNameList, String.class);
+        for(int i = 0; i < cpList.size(); i++){
+            if(cp.getProductName().equals(cpList.get(i))){
+                System.out.println("Bio u insert return 2");
+                return 2;
+            }
+        }
+        System.out.println("List in isert product: " + cpList);
         int i = jdbcTemplate.update(sql, cp.getProductName(), cp.getProductDescription(), cp.getProductQuantity(),
                 cp.getProductPrice(), cp.getProductImage());
         if(i == 1){
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 
     @Override

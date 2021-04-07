@@ -89,10 +89,10 @@ public class UserRepository implements UserRepositoryInterface{
     @Override
     public boolean updateUser(User user, Integer id) {
 
-        String sql = "UPDATE users SET name = ?, surname = ?, email = ?, password = ?," +
+        String sql = "UPDATE users SET name = ?, surname = ?, password = ?," +
                 "address = ?, zip = ?, city = ?, country = ?  WHERE userid = ?";
 
-         int i = jdbcTemplate.update(sql, user.getNameName(), user.getSurname(), user.getEmail(),
+         int i = jdbcTemplate.update(sql, user.getNameName(), user.getSurname(),
                     user.getPassword(), user.getAddress(), user.getZip(), user.getCity(),
                     user.getCountry(), id);
          if(i == 1){

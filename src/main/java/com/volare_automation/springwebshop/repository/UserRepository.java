@@ -229,6 +229,34 @@ public class UserRepository implements UserRepositoryInterface{
         return false;
     }
 
+    @Override
+    public boolean saveActivationToken(String token) {
+        System.out.println("token u act link: " + token);
+        String sql = "INSERT INTO activation_keys (activationkey) VALUES (?)";
+        String getActKeys = "SELECT activationkey FROM activation_keys";
+
+
+        List<String> actKeys = jdbcTemplate.queryForList(getActKeys, String.class);
+        System.out.println("act keys: " + actKeys);
+        if(actKeys.size() > 0){
+            for(int k = 0; k < actKeys.size(); k++){
+                if(actKeys.get(k).equals(token)){
+                    System.out.println("bio u act link");
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("bio u act link prije jdbc");
+        int i = jdbcTemplate.update(sql, token);
+
+        if(i == 1){
+            return true;
+        }
+        System.out.println("bio u act link iza svega");
+        return false;
+    }
+
 //    @Override
 //    public Map<String, Object> getPasswordAndEnabledByUsername(User user) {
 //

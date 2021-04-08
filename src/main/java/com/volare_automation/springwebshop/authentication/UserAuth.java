@@ -233,8 +233,13 @@ public class UserAuth {
                         "SessionId", "welcome",
                         "HttpOnly;", "SameSite=Lax", "Path=/"));
         System.out.println("token u activate: " + token);
-        userRepositoryInterface.activateUser(token);
-        return true;
+        boolean activateUser = userRepositoryInterface.saveActivationToken(token);
+        if(activateUser) {
+            userRepositoryInterface.activateUser(token);
+            System.out.println("bio u userAuth");
+            return true;
+        }
+        return false;
     }
 
     @RequestMapping(value = "/user/del", method = RequestMethod.GET)

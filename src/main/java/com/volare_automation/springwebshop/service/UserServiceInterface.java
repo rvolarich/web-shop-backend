@@ -33,5 +33,7 @@ public interface UserServiceInterface {
     boolean registerUser(HttpServletRequest request, User user) throws IOException, MessagingException, DocumentException;
     String getName(HttpServletRequest request);
     Integer getExpValueFromCookie(HttpServletRequest request);
+    boolean resetPasswordEmail(String name, String username) throws DocumentException, MessagingException, IOException;
+    String encodePassword(String password);
    // public void postCartProduct(CartProductTest c);
 }

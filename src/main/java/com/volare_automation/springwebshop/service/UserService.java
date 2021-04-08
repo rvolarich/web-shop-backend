@@ -188,6 +188,30 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public boolean resetPasswordEmail(String name, String username) throws DocumentException, MessagingException, IOException {
+
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("name", name);
+        userMap.put("useremail", username);
+
+        Mail mail = new Mail();
+        mail.setFrom("noreply@gmail.com");
+        mail.setTo(username);
+        mail.setSubject("Password reset link");
+        mail.setHtmlTemplate(new Mail.HtmlTemplate("resetPass", userMap));
+
+        emailServiceInterface.sendMail(mail);
+        return false;
+    }
+
+    @Override
+    public String encodePassword(String password) {
+
+        String hashPassword = passwordEncoder.encode(password);
+        return hashPassword;
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepositoryInterface.getAllUsers();
     }
@@ -282,7 +306,7 @@ public class UserService implements UserServiceInterface{
             Mail mail = new Mail();
             mail.setFrom("noreply@gmail.com");
             mail.setTo(user.getUsername());
-            mail.setSubject("hi");
+            mail.setSubject("Registration link");
             mail.setHtmlTemplate(new Mail.HtmlTemplate("activationMail", userMap));
 
             emailServiceInterface.sendMail(mail);

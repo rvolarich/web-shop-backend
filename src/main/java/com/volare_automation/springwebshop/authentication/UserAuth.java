@@ -13,9 +13,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -240,6 +238,40 @@ public class UserAuth {
             return true;
         }
         return false;
+    }
+
+    //reset password email
+    @RequestMapping(value = "/pass", method = RequestMethod.POST)
+    public String resetPasswordEmail(@RequestBody User user) throws DocumentException, MessagingException, IOException {
+
+        String userName = "";
+        List<String> userlist = userRepositoryInterface.listOfUsernames();
+        System.out.println("user list: " + userlist);
+        if(userlist.size() > 0){
+            for(int i = 0; i < userlist.size(); i++){
+                if(userlist.get(i).equals(user.getUsername())){
+                    userName = userRepositoryInterface.getNameByUsername(user.getUsername());
+                    userServiceInterface.resetPasswordEmail(userName, user.getUsername());
+                    return "An email has been sent to the entered address with password reset link!";
+                }
+            }
+        }
+        return "Error sending email address!";
+    }
+
+    @RequestMapping(value = "/passhgjgJHGhk76JhjgjhewerRTEiopopijLJKoiiuuitwJH6738", method = RequestMethod.POST)
+    public String resetPassword(@RequestBody User user) throws DocumentException, MessagingException, IOException {
+
+        if(user.getUsername() == null){
+            return "Operation not allowed!";
+        }
+
+        String hashPassword = userServiceInterface.encodePassword(user.getPassword());
+        boolean passUpdate = userRepositoryInterface.updatePasswordByUsername(user.getUsername(), hashPassword);
+        if(passUpdate){
+            return "Reseting password...";
+        }
+        return "Error reseting password!";
     }
 
     @RequestMapping(value = "/user/del", method = RequestMethod.GET)

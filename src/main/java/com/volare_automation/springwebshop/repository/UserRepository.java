@@ -218,6 +218,28 @@ public class UserRepository implements UserRepositoryInterface{
     }
 
     @Override
+    public String getNameByUsername(String nameName) {
+
+        System.out.println("nameName: " + nameName);
+        String name = "";
+        String sql = "SELECT name FROM users WHERE username=?";
+
+             name = jdbcTemplate.queryForObject(sql, new Object[]{nameName}, String.class);
+
+        return name;
+    }
+
+    @Override
+    public boolean updatePasswordByUsername(String username, String password) {
+        String sql = "UPDATE users SET password = ? WHERE username = ?";
+        int i = jdbcTemplate.update(sql, password, username);
+        if(i == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean activateUser(String token) {
 
         String sql = "UPDATE users SET enabled=? WHERE activationtoken=?";

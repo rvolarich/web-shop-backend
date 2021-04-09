@@ -47,7 +47,7 @@ public class UserAuth {
 
     @RequestMapping(value = "/logged_in", method = RequestMethod.GET)
     public UserAuthDataModel loggedIn(HttpServletRequest request,
-                                      HttpServletResponse response, @RequestParam Boolean sessionExpired) {
+                                      HttpServletResponse response) {
 
 
 
@@ -225,14 +225,12 @@ public class UserAuth {
     @RequestMapping(value = "/activate", method = RequestMethod.GET)
     public boolean activateAccount(HttpServletResponse response, @RequestParam String token){
 
-        System.out.println("token " + token);
-        response.addHeader("Set-Cookie",
-                String.format("%s=%s; %s; %s; %s;",
-                        "SessionId", "welcome",
-                        "HttpOnly;", "SameSite=Lax", "Path=/"));
-        System.out.println("token u activate: " + token);
         boolean activateUser = userRepositoryInterface.saveActivationToken(token);
         if(activateUser) {
+            response.addHeader("Set-Cookie",
+                    String.format("%s=%s; %s; %s; %s;",
+                            "SessionId", "welcome",
+                            "HttpOnly;", "SameSite=Lax", "Path=/"));
             userRepositoryInterface.activateUser(token);
             System.out.println("bio u userAuth");
             return true;

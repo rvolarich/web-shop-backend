@@ -115,27 +115,17 @@ public class ProductService implements ProductServiceInterface {
         for(int i = 0; i < cpList.size(); i++){
             cartList.add(cpList.get(i));
         }
-        System.out.println("cart list size: " + cartList.size());
+
 
         String nameName = cartList.get(cartList.size()-1).getNameName();
         String email = cartList.get(cartList.size()-1).getEmail();
-        System.out.println("Email adresa: " + email);
+
         cartList.remove(cartList.size()-1);
 
-        System.out.println("cart list size after remove: " + cartList.size());
 
-        for(int i = 0; i < cartList.size(); i++){
-            System.out.println("Product list to erase: " + cartList.get(i));
-        }
         productRepositoryInterface.confirmCartOrder(cartList, id);
 
 
-      //  DecimalFormat twoDecimal = new DecimalFormat("#.00");
-
-//        for(CartProduct c : cartList){
-//            c.setProductPrice(Math.round(c.getProductPrice() * 100.0) / 100.0);
-//            cartListRounded.add(c);
-//        }
         double total = 0;
 
         for (int i = 0; i < cartList.size(); i++) {
@@ -154,9 +144,9 @@ public class ProductService implements ProductServiceInterface {
         Mail mail = new Mail();
         mail.setFrom("noreply@gmail.com");
         mail.setTo(email);
-        mail.setSubject("hi");
+        mail.setSubject("Order information");
         mail.setHtmlTemplate(new Mail.HtmlTemplate("sample", properties));
-        System.out.println("Email adresa nakon: " + mail.getTo());
+
         emailServiceInterface.sendMail(mail);
 
 

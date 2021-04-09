@@ -112,7 +112,7 @@ public class UserRepository implements UserRepositoryInterface{
         String sql = "DELETE FROM users WHERE userid = ?";
         String deleteTable = String.format("DROP TABLE IF EXISTS t_%s", String.valueOf(id));
         Object [] userObject = new Object[]{id};
-        System.out.println("user id" + id);
+
         jdbcTemplate.execute(deleteTable);
         int del = jdbcTemplate.update(sql, userObject);
         if(del > 0){
@@ -213,7 +213,7 @@ public class UserRepository implements UserRepositoryInterface{
         if(id != 0) {
             name = jdbcTemplate.queryForObject(queryId, new Object[]{id}, String.class);
         }
-        System.out.println("name from data: " + name);
+
         return name;
     }
 
@@ -253,29 +253,29 @@ public class UserRepository implements UserRepositoryInterface{
 
     @Override
     public boolean saveActivationToken(String token) {
-        System.out.println("token u act link: " + token);
+
         String sql = "INSERT INTO activation_keys (activationkey) VALUES (?)";
         String getActKeys = "SELECT activationkey FROM activation_keys";
 
 
         List<String> actKeys = jdbcTemplate.queryForList(getActKeys, String.class);
-        System.out.println("act keys: " + actKeys);
+
         if(actKeys.size() > 0){
             for(int k = 0; k < actKeys.size(); k++){
                 if(actKeys.get(k).equals(token)){
-                    System.out.println("bio u act link");
+
                     return false;
                 }
             }
         }
 
-        System.out.println("bio u act link prije jdbc");
+
         int i = jdbcTemplate.update(sql, token);
 
         if(i == 1){
             return true;
         }
-        System.out.println("bio u act link iza svega");
+
         return false;
     }
 
@@ -384,7 +384,7 @@ public class UserRepository implements UserRepositoryInterface{
 
         String sql = "SELECT enabled FROM users WHERE userid=?";
         String isEnabled = jdbcTemplate.queryForObject(sql, new Object[]{id}, String.class);
-        System.out.println("Is enabled iz funkcije = " + id  + isEnabled);
+
         return isEnabled;
     }
 
